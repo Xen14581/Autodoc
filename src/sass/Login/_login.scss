@@ -1,11 +1,3 @@
-.header {
-  &-bold {
-    font-family: "Montserrat", sans-serif;
-    font-size: 4em;
-    font-weight: 900;
-  }
-}
-
 .login {
   &-button {
     background-color: #00c2ff;
@@ -13,14 +5,5 @@
     &:hover {
       background-color: #0000ff;
     }
-  }
-}
-
-.neu {
-  &-paper {
-    border-radius: 15px;
-    background: #f5f5f5;
-    box-shadow:  26px 26px 26px #d9d9d9,
-                -26px -26px 26px #ffffff;
   }
 }

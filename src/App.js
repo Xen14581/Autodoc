@@ -35,6 +35,8 @@ import Login from './pages/Login/';
 import Register from './pages/Register/';
 import Dash from './pages/Dash/';
 
+import OverLay from "./components/Overlay/";
+
 
 function App() {
   return (
@@ -88,6 +90,7 @@ function App() {
           <PrivateAdmin path ="/viewappointments/:d_id" exact component = {ViewAppointments}/>
         </Switch>
       </div>
+      <OverLay />
     </Router>
     </>
    );

@@ -14,7 +14,10 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import placeholder from "../../assets/placeholder_robot.png";
+import { GeoJsonGeometry } from "three-geojson-geometry";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useDispatch } from "react-redux";
+import geojson from '../../components/geojson.json'
 
 const Login = () => {
   const [login, setLogin] = useState({ email: "", password: "" });
@@ -25,6 +28,15 @@ const Login = () => {
   const passRef = useRef();
   const emailRegex =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+  const N = 4e4;
+  const multiPoints = {
+    type: "MultiPoint",
+    coordinates: [...Array(N).keys()].map(() => [
+      (Math.random() - 0.5) * 360,
+      (Math.random() - 0.5) * 180,
+    ]),
+  };
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -82,6 +94,13 @@ const Login = () => {
             </Grid>
             <Grid item>
               <img src={placeholder} />
+              {/* <Canvas>
+                <ambientLight intensity={0.1} />
+                <directionalLight position={[0, 0, 5]} />
+                <line geometry={new GeoJsonGeometry(geojson, 50)}>
+                  <lineBasicMaterial color="white" />
+                </line>
+              </Canvas> */}
             </Grid>
             <Grid item></Grid>
           </Grid>
