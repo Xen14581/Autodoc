@@ -25,7 +25,7 @@ const Dash = () => {
         <div className={classes.toolbar} />
         <Grid
           container
-          spacing={2}
+          spacing={4}
           alignItems="center"
           justifyContent="center"
           style={{ margin: "5% 0 0 0" }}
@@ -37,11 +37,11 @@ const Dash = () => {
             md={8}
             lg={8}
             direction="column"
-            spacing={8}
+            spacing={4}
             alignItems="center"
             justifyContent="center"
           >
-            <Grid item xs>
+            <Grid item xs style={{ width: "90%" }}>
               <div className="neu-paper">
                 <Grid
                   container
@@ -70,7 +70,7 @@ const Dash = () => {
                         fontWeight: "800",
                       }}
                     >
-                      You haven't finished any appointments yet!{" "}
+                      You haven't finished any appointments yet! <br />
                       <Link
                         to="/appointments"
                         style={{ textDecoration: "None" }}
@@ -82,7 +82,7 @@ const Dash = () => {
                 </Grid>
               </div>
             </Grid>
-            <Grid item xs style={{width: '90%'}}>
+            <Grid item xs style={{ width: "90%" }}>
               <div className="neu-paper">
                 <Grid
                   container

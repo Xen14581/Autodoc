@@ -14,8 +14,11 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import placeholder from "../../assets/placeholder_robot.png";
+import { useDispatch } from "react-redux";
+import { SignUp } from "../../actions/auth";
 
 const Register = () => {
+  const dispatch = useDispatch();
   const [login, setLogin] = useState({
     name: "",
     email: "",
@@ -52,7 +55,8 @@ const Register = () => {
 
   const Submit = () => {
     console.log(login);
-    history.push("/dash");
+    dispatch({ type: "LOAD" })
+    dispatch(SignUp(login, history, () => dispatch({ type: "LOAD" })));
   };
 
   return (

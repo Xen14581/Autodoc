@@ -14,29 +14,19 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import placeholder from "../../assets/placeholder_robot.png";
-import { GeoJsonGeometry } from "three-geojson-geometry";
-import { Canvas, useFrame } from "@react-three/fiber";
 import { useDispatch } from "react-redux";
-import geojson from '../../components/geojson.json'
+import { Signin } from "../../actions/auth";
 
 const Login = () => {
   const [login, setLogin] = useState({ email: "", password: "" });
   const [emailError, setEmailError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
   const emailRef = useRef();
   const passRef = useRef();
   const emailRegex =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-  const N = 4e4;
-  const multiPoints = {
-    type: "MultiPoint",
-    coordinates: [...Array(N).keys()].map(() => [
-      (Math.random() - 0.5) * 360,
-      (Math.random() - 0.5) * 180,
-    ]),
-  };
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -60,7 +50,8 @@ const Login = () => {
 
   const Submit = () => {
     console.log(login);
-    history.push("/dash");
+    dispatch({ type: "LOAD" });
+    dispatch(Signin(login, history, () => dispatch({ type: "LOAD" })));
   };
 
   return (
@@ -93,14 +84,7 @@ const Login = () => {
               </div>
             </Grid>
             <Grid item>
-              <img src={placeholder} />
-              {/* <Canvas>
-                <ambientLight intensity={0.1} />
-                <directionalLight position={[0, 0, 5]} />
-                <line geometry={new GeoJsonGeometry(geojson, 50)}>
-                  <lineBasicMaterial color="white" />
-                </line>
-              </Canvas> */}
+              <img src={placeholder} alt="" />
             </Grid>
             <Grid item></Grid>
           </Grid>
@@ -203,7 +187,6 @@ const Login = () => {
                             </IconButton>
                           </InputAdornment>
                         }
-                        labelWidth={70}
                       />
                     </FormControl>
                   </Grid>
