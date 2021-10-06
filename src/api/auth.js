@@ -10,3 +10,5 @@ API.interceptors.request.use((req) => {
 
 export const login = (formData) => API.post("/", formData);
 export const signUp = (formData) => API.post("/register", formData);
+
+export const updateprofilepic = (formdata)=>API.put("/update-profile-pic",formdata)

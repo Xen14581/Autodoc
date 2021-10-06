@@ -29,7 +29,7 @@ const Navbar = () => {
           justifyContent="flex-end"
         >
           <Grid item xs={4} md={6} lg={6}>
-            <Link to="/homepage">
+            <Link to="/">
               <img src={placeholder} style={{ height: "4em" }} alt="LOGO" />
             </Link>
           </Grid>

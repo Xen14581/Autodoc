@@ -16,6 +16,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import placeholder from "../../assets/placeholder_robot.png";
 import { useDispatch } from "react-redux";
 import { SignUp } from "../../actions/auth";
+import autodoc from "../../assets/autodoc(1).svg";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -84,14 +85,12 @@ const Register = () => {
             }}
           >
             <Grid item>
-              <div className="header-bold" style={{ color: "white" }}>
-                Autodoc
-              </div>
+              <img
+                src={autodoc}
+                alt=""
+                style={{ width: "100%", height: "100%" }}
+              />
             </Grid>
-            <Grid item>
-              <img src={placeholder} />
-            </Grid>
-            <Grid item></Grid>
           </Grid>
           <Grid
             container
@@ -129,7 +128,7 @@ const Register = () => {
                       variant="h3"
                       style={{
                         fontFamily: "Montserrat, sans-serif",
-                        fontWeight: "800",
+                        fontWeight: "500",
                       }}
                       color="rgba(0, 0, 0, 0.5)"
                     >
@@ -185,6 +184,7 @@ const Register = () => {
                       <OutlinedInput
                         inputRef={passRef}
                         id="outlined-adornment-password"
+                        label="Password"
                         type={showPassword ? "text" : "password"}
                         onChange={handleInput}
                         name="password"
@@ -234,7 +234,7 @@ const Register = () => {
                     style={{ width: "100%", margin: "2% 0 2% 0" }}
                   >
                     <Typography variant="subtitle1">
-                      Already a member? <Link to="/log">Login</Link>
+                      Already a member? <Link to="/login">Login</Link>
                     </Typography>
                   </Grid>
                 </Grid>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, useMediaQuery } from "@material-ui/core";
-// import { logout } from "../../actions/auth";
+import { Logout } from "../../actions/auth";
 
 const OverLay = () => {
   const val = useSelector((state) => state.hamburger.Open);
@@ -69,8 +69,8 @@ const OverLay = () => {
                         }
                   }
                   onClick={() => {
-                    // dispatch(logout(history));
-                    dispatch({ type: "TOGGLE" });
+                    Logout(dispatch, history);
+                    dispatch({type: "TOGGLE"})
                   }}
                 >
                   <b>LOG OUT</b>

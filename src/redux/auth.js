@@ -11,12 +11,11 @@ const reducer = (
       localStorage.setItem("token", action.data.result.token);
       return { ...action.data.result };
     case "UPDATE_PROFILE":
-      const newstate = { ...state, ...action.data };
+      const newstate = { ...action.data };
       localStorage.setItem("profile", JSON.stringify({ ...newstate }));
       return { ...newstate };
     case "LOGOUT":
       localStorage.clear();
-
       return {};
     default:
       return { ...state };

@@ -79,7 +79,7 @@ const Loader = (props) => {
   return (
     <CSSTransition
       in={val}
-      timeout={500}
+      timeout={1000}
       classNames="loader"
       unmountOnExit
     >
@@ -88,7 +88,6 @@ const Loader = (props) => {
         style={{
           height: props.height,
           width: props.width,
-          // display: props.loading ? "block" : "none",
         }}
       >
         <Grid

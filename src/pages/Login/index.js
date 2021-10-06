@@ -16,6 +16,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import placeholder from "../../assets/placeholder_robot.png";
 import { useDispatch } from "react-redux";
 import { Signin } from "../../actions/auth";
+import autodoc from "../../assets/autodoc(1).svg";
 
 const Login = () => {
   const [login, setLogin] = useState({ email: "", password: "" });
@@ -79,14 +80,12 @@ const Login = () => {
             }}
           >
             <Grid item>
-              <div className="header-bold" style={{ color: "white" }}>
-                Autodoc
-              </div>
+              <img
+                src={autodoc}
+                alt=""
+                style={{ width: "100%", height: "100%" }}
+              />
             </Grid>
-            <Grid item>
-              <img src={placeholder} alt="" />
-            </Grid>
-            <Grid item></Grid>
           </Grid>
           <Grid
             container
@@ -97,7 +96,7 @@ const Login = () => {
             align="center"
             justifyContent="center"
             style={{
-              backgroundColor: "#f5f5f5",
+              backgroundColor: "#f3f3f3",
               borderRadius: "80px 0 0 0",
               width: "100%",
             }}
@@ -111,6 +110,7 @@ const Login = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  padding: "1%",
                 }}
               >
                 <Grid
@@ -124,7 +124,7 @@ const Login = () => {
                       variant="h3"
                       style={{
                         fontFamily: "Montserrat, sans-serif",
-                        fontWeight: "800",
+                        fontWeight: "500",
                       }}
                       color="rgba(0, 0, 0, 0.5)"
                     >
@@ -170,6 +170,7 @@ const Login = () => {
                         type={showPassword ? "text" : "password"}
                         onChange={handleInput}
                         name="password"
+                        label="Password"
                         autoComplete="current-password"
                         endAdornment={
                           <InputAdornment position="end">

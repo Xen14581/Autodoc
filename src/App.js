@@ -1,13 +1,13 @@
 import "./sass/main.scss";
-import React from "react";
+import React, { useEffect } from "react";
 import DocHome from "../src/DoctorSide/DocHome";
 import Appointments from "../src/PatientSide/Appointments";
-import LoginPage from "./LoginPage";
 import "./App.css";
 import Homepage from "./Homepage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import AOS from 'aos';
+import "aos/dist/aos.css";
 import Doctors from "../src/PatientSide/Doctors";
-import SignUp from "./SignUp";
 import Home from "../src/PatientSide/Home";
 import Notes from "../src/PatientSide/Notes";
 import PrivateRoute from "../src/Utilities/PrivateRoute";
@@ -31,14 +31,22 @@ import AddPrescriptions from "./DoctorSide/AddPrescriptions";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Landing from "./pages/Landing";
 import Login from "./pages/Login/";
 import Register from "./pages/Register/";
-import Dash from "./pages/Dash/";
+import PatientDash from "./pages/Dash/Patient/";
+import DoctorDash from "./pages/Dash/Doctor";
+import AdminDash from "./pages/Dash/Admin";
 
 import OverLay from "./components/Overlay/";
 import Loader from "./components/Loader/";
 
 function App() {
+  useEffect(() => {
+    AOS.init({ once: true });
+    AOS.refresh();
+  }, []);
+
   return (
     <>
       <ToastContainer
@@ -52,17 +60,15 @@ function App() {
         draggable={false}
         pauseOnHover={false}
       />
-      <Router>
+      <Router hashType="noslash">
         <div className="App">
           <Switch>
-            <Route path="/" exact component={Homepage} />
-            <Route path="/log" exact component={Login} />
+            <Route path="/" exact component={Landing} />
+            <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={Register} />
-            <Route path="/dash" exact component={Dash} />
-
-            <Route path="/signup" exact component={SignUp} />
-
-            <Route path="/login" exact component={LoginPage} />
+            <Route path="/dash" exact component={PatientDash} />
+            <Route path="/docdash" exact component={DoctorDash} />
+            <Route path="/admindash" exact component={AdminDash} />
           </Switch>
           <Switch>
             <PrivatePatient path="/home" exact component={Home} />

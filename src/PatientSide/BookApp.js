@@ -24,19 +24,19 @@ const user = getUser()
 const auth = `Bearer ${sessionStorage.getItem('token')}`
    
 
-const getData = async(no,val)=>{
-    setDate(no)
-    setDay(val)
+// const getData = async(no,val)=>{
+//     setDate(no)
+//     setDay(val)
     
-     let data = await axios.get(`http://localhost:8080/getSlots/${match.params.d_id}/${val}`,{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-     setSlots(res.data)
- })
-}
+//      let data = await axios.get(`http://localhost:8080/getSlots/${match.params.d_id}/${val}`,{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//      setSlots(res.data)
+//  })
+// }
 
 
 const app = (val)=>{
@@ -59,43 +59,44 @@ let data = {
     'status':'Booked'
 }
 
- if ( window.confirm(`Book an appointment for ${datetime}? `))
- {await axios.get(`http://localhost:8080/getAppointments`,{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-    let response = res.data
-    response.filter((r)=>{
-        if(r.d_id === parseInt(match.params.d_id) && r.a_datetime ===datetime && r.status !=='Cancelled By Patient'){
-            appointments.push(r)
-        }
-    })   
-}).then((res)=>{
-    if(appointments.length === 0 ){
-    axios.post('http://localhost:8080/addAppointments',data,{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-     alert("The appointment has been booked successfully")
- })
-}
-else{
-    alert("The slot is occupied please pick a different slot")
-}
+//  if ( window.confirm(`Book an appointment for ${datetime}? `))
+//  {await axios.get(`http://localhost:8080/getAppointments`,{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//     let response = res.data
+//     response.filter((r)=>{
+//         if(r.d_id === parseInt(match.params.d_id) && r.a_datetime ===datetime && r.status !=='Cancelled By Patient'){
+//             appointments.push(r)
+//         }
+//     })   
+// }).then((res)=>{
+//     if(appointments.length === 0 ){
+//     axios.post('http://localhost:8080/addAppointments',data,{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//      alert("The appointment has been booked successfully")
+//  })
+// }
+// else{
+//     alert("The slot is occupied please pick a different slot")
+// }
 
-})
+// })
 
-}
+// }
 }
 
 
 const buttons =(val)=>{
     return (
-        <a onClick={()=>{getData(val.id,val.day)}}>{val.day}</a>
+        // <a onClick={()=>{getData(val.id,val.day)}}>{val.day}</a>
+        <></>
     )
 }
 return (

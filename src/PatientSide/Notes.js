@@ -14,45 +14,45 @@ const [filternotes,setFilterNotes] = useState([])
 const [filterAppointments,setFilterAppointments] = useState([])
 const [doctor,setDoctor] = useState([])
 const [render,setRender] = useState([])
-useEffect(async()=>{
-    let data = await axios.get('http://localhost:8080/getNotes',{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-   setNote(res.data)
-})
-},[setNote,auth])
+// useEffect(async()=>{
+//     let data = await axios.get('http://localhost:8080/getNotes',{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//    setNote(res.data)
+// })
+// },[setNote,auth])
 
-useEffect(async()=>{
-    let data = await axios.get('http://localhost:8080/getAppointments',{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-   setAppointments(res.data)
-})
-},[setAppointments,auth])
-console.log(appointments)
-useEffect(()=>{
- setFilterAppointments(
-     appointments.filter((app)=>{ 
-        return app.d_id === parseInt(match.params.d_id) && app.p_id=== user.id
-     })
- )   
-},[setFilterAppointments,appointments])
-useEffect(async()=>{
-  let data = await axios.get(`http://localhost:8080/getDoctor/${match.params.d_id}`,{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-   setDoctor(res.data)
-})  
-},[setDoctor,auth])
+// useEffect(async()=>{
+//     let data = await axios.get('http://localhost:8080/getAppointments',{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//    setAppointments(res.data)
+// })
+// },[setAppointments,auth])
+// console.log(appointments)
+// useEffect(()=>{
+//  setFilterAppointments(
+//      appointments.filter((app)=>{ 
+//         return app.d_id === parseInt(match.params.d_id) && app.p_id=== user.id
+//      })
+//  )   
+// },[setFilterAppointments,appointments])
+// useEffect(async()=>{
+//   let data = await axios.get(`http://localhost:8080/getDoctor/${match.params.d_id}`,{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//    setDoctor(res.data)
+// })  
+// },[setDoctor,auth])
 
 
 useEffect(()=>{

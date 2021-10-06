@@ -13,69 +13,69 @@ const [appointments,setAppointments] = useState([])
 const [filteraddnotes,setFilterAddNotes] = useState([])
 const [render,setRender] = useState([])
 const [comment,setComment] = useState('')
-useEffect(async()=>{
-    let data = await axios.get('http://localhost:8080/getNotes',{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-   setNote(res.data)
-})
-},[setNote,auth])
-useEffect(async()=>{
-    let data = await axios.get('http://localhost:8080/getAppointments',{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-   setAppointments(res.data.filter(r=>{
-        return r.d_id === user.id && r.p_id === parseInt(match.params.p_id)
-   }))
-})
-},[setAppointments,auth])
+// useEffect(async()=>{
+//     let data = await axios.get('http://localhost:8080/getNotes',{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//    setNote(res.data)
+// })
+// },[setNote,auth])
+// useEffect(async()=>{
+//     let data = await axios.get('http://localhost:8080/getAppointments',{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//    setAppointments(res.data.filter(r=>{
+//         return r.d_id === user.id && r.p_id === parseInt(match.params.p_id)
+//    }))
+// })
+// },[setAppointments,auth])
 
-console.log(appointments)
-useEffect(()=>{
-    setFilterAddNotes(
-        note.filter((fa)=>{
-            return appointments.some((n)=>{
-                return n.a_id === fa.a_id
-            })
-        })
-    )
-},[setFilterAddNotes,appointments,note])
-useEffect(()=>{ 
-    appointments.some((app)=>{
-                return filteraddnotes.some((n)=>{
-                if(n.a_id=== app.a_id){ 
-                    let data = {
-                        note: n.note,
-                        slot:app.a_datetime
+// console.log(appointments)
+// useEffect(()=>{
+//     setFilterAddNotes(
+//         note.filter((fa)=>{
+//             return appointments.some((n)=>{
+//                 return n.a_id === fa.a_id
+//             })
+//         })
+//     )
+// },[setFilterAddNotes,appointments,note])
+// useEffect(()=>{ 
+//     appointments.some((app)=>{
+//                 return filteraddnotes.some((n)=>{
+//                 if(n.a_id=== app.a_id){ 
+//                     let data = {
+//                         note: n.note,
+//                         slot:app.a_datetime
                         
-                    } 
-                    setRender(oldArray=>{return [...oldArray,data]})
-                }   
-        })
-    })
+//                     } 
+//                     setRender(oldArray=>{return [...oldArray,data]})
+//                 }   
+//         })
+//     })
 
-},[setRender,appointments,filteraddnotes])
+// },[setRender,appointments,filteraddnotes])
 
-const postNote= ()=>{
-    const  a={
-        a_id: parseInt(match.params.a_id),
-        note: comment
-    }
-    axios.post('http://localhost:8080/addNotes',a,{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-     window.location.reload(false);
- })
-}
+// const postNote= ()=>{
+//     const  a={
+//         a_id: parseInt(match.params.a_id),
+//         note: comment
+//     }
+//     axios.post('http://localhost:8080/addNotes',a,{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//      window.location.reload(false);
+//  })
+// }
 
 
 function addnotes(val)
@@ -108,7 +108,7 @@ function addnotes(val)
             </div>
             <div className = "addNotes">
             <input type="text" placeholder="Notes" onChange={(e)=>{setComment(e.target.value)}}/>
-            <button onClick={postNote}>Post</button>
+            {/* <button onClick={postNote}>Post</button> */}
             </div>
                 </div>
             

@@ -12,21 +12,21 @@ function Prescriptions() {
     const user = getUser()
     const [render,setRender] = useState([])
     const [unique,setUnique] = useState([])
-    useEffect(async()=>{
-         await axios.get('http://localhost:8080/getAppointments',{headers:{
-            "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
-            "Authorization": auth
- }}).then((res)=>{
-     let response = res.data
-   setAppointments(
-       response.filter((r)=>{
-          return r.p_id === 3 
-       })
-       )
-})
-    },[setAppointments,auth])
+//     useEffect(async()=>{
+//          await axios.get('http://localhost:8080/getAppointments',{headers:{
+//             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Authorization",
+//             "Access-Control-Allow-Origin": "*",
+//             "Access-Control-Allow-Methods": "PUT, DELETE, POST, GET, OPTIONS",
+//             "Authorization": auth
+//  }}).then((res)=>{
+//      let response = res.data
+//    setAppointments(
+//        response.filter((r)=>{
+//           return r.p_id === 3 
+//        })
+//        )
+// })
+//     },[setAppointments,auth])
 
     useEffect(()=>{
         appointments.map(async (app)=>{
