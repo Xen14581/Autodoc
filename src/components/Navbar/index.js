@@ -1,20 +1,34 @@
-import React from "react";
-import { AppBar, Grid, Toolbar, useMediaQuery } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import {
+  AppBar,
+  Grid,
+  Toolbar,
+  useMediaQuery,
+  Button,
+  Avatar,
+  Menu,
+  MenuItem
+} from "@mui/material";
+import { Link, useHistory } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { useDispatch, useSelector } from "react-redux";
-import placeholder from "../../assets/placeholder_robot.png";
+import logo from "../../assets/Autodoc(2).svg";
+import { Logout } from "../../actions/auth";
 
 const Navbar = () => {
   const val = useSelector((state) => state.hamburger.Open);
   const dispatch = useDispatch();
+  const history = useHistory();
+  const [open, setOpen] = useState(false);
+  const [anchor, setAnchor] = useState(null)
+  const tab = useMediaQuery("(max-width:680px)");
   return (
     <AppBar
       position="fixed"
       id="mynav"
       style={{
         backgroundColor: "white",
-        zIndex: "100",
+        zIndex: 2,
         boxShadow: `0 2px 4px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 8%)`,
         webbkitBoxShadow: `-1px 7px 28px -1px rgba(0,0,0,0.15)`,
         MozBoxShadow: `-1px 7px 28px -1px rgba(0,0,0,0.15)`,
@@ -28,20 +42,84 @@ const Navbar = () => {
           alignItems="center"
           justifyContent="flex-end"
         >
-          <Grid item xs={4} md={6} lg={6}>
-            <Link to="/">
-              <img src={placeholder} style={{ height: "4em" }} alt="LOGO" />
+          <Grid item xs={4}>
+            <Link to="/dash">
+              <img src={logo} style={{ height: "4em" }} alt="LOGO" />
             </Link>
           </Grid>
-          <Grid container item xs={8} md={6} lg={6} justifyContent="flex-end">
-            <Hamburger
+          <Grid container item xs={8} justifyContent="flex-end">
+            {/* <Hamburger
               toggled={val}
               toggle={() => dispatch({ type: "TOGGLE" })}
               rounded
               direction="right"
               color="rgb(2, 36, 96)"
               size={20}
-            />
+            /> */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+              }}
+            >
+              <Button
+                onClick={() => history.push("/checkup")}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItens: "center",
+                }}
+              >
+                AI Checkup
+              </Button>
+              <Button
+                onClick={() => history.push("/book")}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItens: "center",
+                }}
+              >
+                Book Appointment
+              </Button>
+              <Button
+                onClick={() => history.push("/appointments")}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItens: "center",
+                }}
+              >
+                View Appointments
+              </Button>
+              <div>
+                <Avatar
+                  alt="profile pic"
+                  src=""
+                  onClick={(e) => {
+                    setOpen(!open)
+                    setAnchor(e.currentTarget)
+                  }}
+                  aria-controls="basic-menu"
+                  aria-haspopup="true"
+                  style={{ cursor: "pointer" }}
+                />
+                <Menu
+                  open={open}
+                  anchorEl={anchor}
+                  onClose={() => setOpen(!open)}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem onClick={() => history.push("/profile")}>Profile</MenuItem>
+                  <MenuItem onClick={() => {
+                    Logout(dispatch, history);
+                  }}>Logout</MenuItem>
+                </Menu>
+              </div>
+            </div>
           </Grid>
         </Grid>
       </Toolbar>

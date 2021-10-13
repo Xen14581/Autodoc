@@ -1,358 +1,262 @@
-import React from "react";
+import React, { useState } from "react";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Avatar from "@mui/material/Avatar";
+import Navbar from "../../components/Navbar";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
+import { toast } from "react-toastify";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+  const user = useSelector(state => state.auth)
+  const tab = useMediaQuery("(max-width:680px)");
   return (
-    <>
-      <div className={classes.root}>
-        <CssBaseline />
-        <ToastContainer
-          position="top-center"
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}
-        >
-          <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              className={clsx(
-                classes.menuButton,
-                open && classes.menuButtonHidden
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              My Account
-            </Typography>
-            <ProfileDropdown />
-          </Toolbar>
-        </AppBar>
-        {matches ? (
-          <Drawer
-            variant="temporary"
-            classes={{
-              paper: clsx(
-                classes.drawerPaper,
-                !open && classes.drawerPaperClose
-              ),
-            }}
-            open={open}
+    <main>
+      <Container
+        style={{
+          minHeight: "100vh",
+          maxWidth: "100%",
+          padding: "0%",
+          margin: "0%",
+          background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
+        }}
+      >
+        <Navbar />
+        <Grid container>
+          <Grid
+            container
+            item
+            xs={12}
+            md={5}
+            lg={5}
+            sx={{ padding: "7% 2% 2% 2%", height: "100%" }}
           >
-            <div className={classes.toolbarIcon}>
-              <IconButton onClick={handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-            <Nav index={4} />
-          </Drawer>
-        ) : (
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: clsx(
-                classes.drawerPaper,
-                !open && classes.drawerPaperClose
-              ),
-            }}
-            open={open}
-          >
-            <div className={classes.toolbarIcon}>
-              <IconButton onClick={handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-            <Nav index={4} />
-          </Drawer>
-        )}
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4} lg={4}>
-                <Paper
-                  className={fixedHeightPaper}
+            <Paper
+              elevation={6}
+              style={{ width: "100%", padding: "4%", borderRadius: 12 }}
+            >
+              <Typography
+                variant="h3"
+                textAlign="center"
+                sx={{ fontFamily: "Montserrat" }}
+              >
+                Edit Profile
+              </Typography>
+              <Divider />
+              <Grid container spacing={1}>
+                <Grid
+                  item
+                  xs={12}
                   style={{
-                    overflow: "hidden",
-                    padding: "10% 5%  2% 5%",
-                    height: "100%",
+                    padding: "4%",
+                    display: "flex",
+                    justifyContent: "center",
                   }}
                 >
-                  <Box
-                    display="flex"
-                    alignItems=""
-                    justifyContent="space-around"
-                  >
+                  <Avatar sx={{ width: 400, height: 400, bgcolor: "#5CB0FF" }}>
                     <Avatar
-                      alt="Your Profile Picture"
-                      className={classes.large}
-                      src={user.image}
+                      alt="Profile Picture"
+                      src=""
+                      sx={{ width: "97%", height: "97%" }}
                     />
-                  </Box>
+                  </Avatar>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  style={{
+                    padding: "0 4% 4% 4%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   <TextField
-                    InputProps={{
-                      readOnly: true,
-                    }}
                     label="Full Name"
-                    defaultValue={`${user.firstName} ${user.lastName}`}
-                    variant="outlined"
-                    style={{ marginTop: "20px", marginBottom: "10px" }}
-                  />
-                  <input
-                    accept="image/*"
-                    className={classes.input}
-                    id="icon-button-file"
-                    type="file"
-                    style={{ display: "none" }}
-                  />
-                  <label
-                    htmlFor="icon-button-file"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                    color="info"
+                    value={user.name}
+                    sx={{ width: "90%" }}
+                    InputProps={{
+                      endAdornment: <Button variant="filled">Save Name</Button>,
                     }}
-                  >
-                    <Fab
-                      color="primary"
-                      aria-label="upload picture"
-                      component="span"
-                      variant="extended"
-                      size="medium"
-                    >
-                      <PhotoCamera />
-                      Change Picture
-                    </Fab>
-                  </label>
-                </Paper>
+                  />
+                </Grid>
               </Grid>
-
-              <Grid item xs={12} md={8} lg={8}>
-                <Paper
-                  className={fixedHeightPaper}
-                  style={{ overflow: "hidden", padding: "5%" }}
+            </Paper>
+          </Grid>
+          <Grid
+            container
+            item
+            xs={12}
+            md={7}
+            lg={7}
+            direction="column"
+            alignItems="center"
+            spacing={2}
+            sx={{
+              padding: "8% 2% 2% 2%",
+              height: "100%",
+              margin: 0
+            }}
+          >
+            <Grid item xs={6} sx={{ width: "100%" }}>
+              <Paper elevation={6} style={{ height: "100%", borderRadius: 12 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{ padding: "2% 4%", height: "100%" }}
                 >
-                  <TextField
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    label="Email ID"
-                    defaultValue={`${user.email}`}
-                    variant="outlined"
-                    style={{ margin: formMargin }}
-                  />
-                  <TextField
-                    label="Mobile Number"
-                    defaultValue={`${user.ph_no}`}
-                    variant="outlined"
-                    style={{ margin: formMargin }}
-                    onChange={handleNumber}
-                  />
-                  <TextField
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    label="Gender"
-                    defaultValue={`${user.gender}`}
-                    variant="outlined"
-                    style={{ margin: formMargin }}
-                  />
-                  <TextField
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    label="Employee ID"
-                    defaultValue={`${user.employee_id}`}
-                    variant="outlined"
-                    style={{ margin: formMargin }}
-                  />
-                  <TextField
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    label="Reporting Officer"
-                    defaultValue={`${user.reporting_officer?.name}`}
-                    variant="outlined"
-                    style={{ margin: formMargin }}
-                  />
-                  <Fab
-                    color="primary"
-                    aria-label="upload picture"
-                    component="span"
-                    variant="extended"
-                    size="medium"
-                    style={{ marginTop: formMargin }}
-                    onClick={updateProfile}
-                  >
-                    Edit Phone Number
-                  </Fab>
-                </Paper>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Paper
-                  className={classes.paper}
-                  style={{ overflow: "hidden", paddingBottom: "2%" }}
-                >
-                  <Grid
-                    container
-                    direction="column"
-                    spacing={1}
-                    display="flex"
-                    justify="center"
-                    alignItems="flex-start"
-                  >
-                    <Grid
-                      item
-                      style={{
-                        width: "100%",
-                        marginTop: "3%",
-                        marginLeft: "7%",
-                      }}
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="h4"
+                      textAlign="center"
+                      sx={{ fontFamily: "Montserrat" }}
                     >
-                      <Title>Change Password</Title>
-                    </Grid>
-                    <Grid
-                      item
-                      style={{
-                        width: "90%",
-                        marginLeft: "5%",
-                        marginRight: "5%",
-                      }}
-                    >
-                      <TextField
-                        error={
-                          input.new_password !== ""
-                            ? input.old_password === ""
-                            : false
-                        }
-                        helperText={
-                          input.new_password !== ""
-                            ? input.old_password === ""
-                              ? "Enter Old Password "
-                              : ""
-                            : ""
-                        }
-                        inputRef={oldPassRef}
-                        type="password"
-                        variant="outlined"
-                        label="Old Password"
-                        name="old_password"
-                        onChange={handleInput}
-                        fullWidth
-                        required
-                        align="left"
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      style={{
-                        width: "90%",
-                        marginLeft: "5%",
-                        marginRight: "5%",
-                      }}
-                    >
-                      <TextField
-                        error={
-                          input.new_password !== ""
-                            ? !passRegex.test(input.new_password)
-                            : false
-                        }
-                        helperText={
-                          input.new_password !== ""
-                            ? !passRegex.test(input.new_password)
-                              ? "Password Must be of atleast 8 characters and must contain 1 lowercase 1 uppercase and 1 number"
-                              : ""
-                            : ""
-                        }
-                        inputRef={newPassRef}
-                        type="password"
-                        variant="outlined"
-                        label="New Password"
-                        name="new_password"
-                        onChange={handleInput}
-                        required
-                        fullWidth
-                        align="left"
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      style={{
-                        width: "90%",
-                        marginLeft: "5%",
-                        marginRight: "5%",
-                      }}
-                    >
-                      <TextField
-                        inputRef={confirmPassRef}
-                        error={
-                          input.confirm_password !== ""
-                            ? input.new_password !== input.confirm_password
-                            : false
-                        }
-                        helperText={
-                          input.confirm_password !== ""
-                            ? input.new_password !== input.confirm_password
-                              ? "Passwords Do not Match"
-                              : ""
-                            : ""
-                        }
-                        variant="outlined"
-                        type="password"
-                        label="Confirm Password"
-                        name="confirm_password"
-                        onChange={handleInput}
-                        fullWidth
-                        required
-                        align="left"
-                      />
-                    </Grid>
-                    <Grid item style={{ width: "100%" }} align="center">
-                      <Fab
-                        color="primary"
-                        aria-label="upload picture"
-                        component="span"
-                        variant="extended"
-                        size="medium"
-                        style={{ marginTop: "1%" }}
-                        onClick={changePass}
-                      >
-                        <LockIcon />
-                        Change Password
-                      </Fab>
-                    </Grid>
+                      Personal Details
+                    </Typography>
+                    <Divider />
                   </Grid>
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper>
-                  <Box>
-                    <KJSIEIT />
-                  </Box>
-                </Paper>
-              </Grid>
+                  <Grid item xs={12} md={6} lg={6}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DesktopDatePicker
+                        label="Date of Birth"
+                        inputFormat="dd/MM/yyyy"
+                        value={new Date(user.dob)}
+                        onChange={() => toast.error("You cannot change this.")}
+                        renderInput={(params) => (
+                          <TextField {...params} fullWidth />
+                        )}
+                        disabled
+                      />
+                      {/* <MobileDatePicker
+                      label="Date of Birth"
+                      inputFormat="dd/MM/yyyy"
+                      value={user.dob}
+                      renderInput={(params) => <TextField {...params} fullWidth />}
+                      disabled
+                    /> */}
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={6}>
+                    <TextField
+                      label="Gender"
+                      value={
+                        user.gender === "m"
+                          ? "Male"
+                          : user.gender === "f"
+                          ? "Female"
+                          : "Other"
+                      }
+                      fullWidth
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={6}>
+                    <TextField
+                      label="E-mail"
+                      value={user.email}
+                      fullWidth
+                      disabled
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Button variant="contained">Save Profile</Button>
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
-          </Container>
-        </main>
-      </div>
-    </>
+            <Grid item xs={6} sx={{ width: "100%" }}>
+              <Paper elevation={6} style={{ height: "100%", borderRadius: 12 }}>
+                <Grid
+                  container
+                  spacing={1}
+                  sx={{ height: "100%", padding: "1% 4%" }}
+                >
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="h4"
+                      textAlign="center"
+                      sx={{ fontFamily: "Montserrat" }}
+                    >
+                      Change Password
+                    </Typography>
+                    <Divider />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      label="Old Password"
+                      type="password"
+                      sx={{ width: "70%" }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      label="New Password"
+                      type="password"
+                      sx={{ width: "70%" }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      label="Confirm New Password"
+                      type="password"
+                      sx={{ width: "70%" }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button variant="contained">Change Password</Button>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
+    </main>
   );
 };
 

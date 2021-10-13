@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "../../../components/Navbar";
-import io from "socket.io-client";
 import {
   Grid,
   Container,
@@ -15,12 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import SearchIcon from "@mui/icons-material/Search";
-import bg from "../../../assets/drawing-1.svg";
-import Messages from "../../../components/Messages";
-import MessageInput from "../../../components/MessageInput";
-import Chats from "../../../components/Chats";
-import notSelected from "../../../assets/online-doctor-animate.svg";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "center",
@@ -29,19 +23,9 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 const DoctorDash = () => {
-  document.title = "Appointments - Autodoc";
-  const selected = useSelector((state) => state.chat.selected);
-  const [socket, setSocket] = useState();
-  const [search, setSearch] = useState("");
-  const ref = useRef();
-
-  useEffect(() => ref.current?.scrollIntoView());
-  useEffect(() => {
-    const newSocket = io(`http://${window.location.hostname}:8000`);
-    setSocket(newSocket);
-    return () => newSocket.close();
-  }, [setSocket]);
-
+  document.title = "Dashboard - Autodoc";
+  const tab = useMediaQuery("(max-width:680px)");
+  const mob = useMediaQuery("(max-width:600px)");
   return (
     <>
       <Navbar />
@@ -56,7 +40,7 @@ const DoctorDash = () => {
           overflow: "hidden",
         }}
       >
-        <Box
+        <Container
           style={{
             padding: 0,
             height: "100vh",
@@ -66,156 +50,84 @@ const DoctorDash = () => {
           }}
         >
           <StyledToolbar />
-          <Paper elevation={15} style={{ height: "85vh", width: "90%" }}>
-            <Grid container style={{ height: "100%" }}>
-              <Grid container item xs={4} direction="column">
-                <Grid
-                  container
-                  item
-                  xs={3}
-                  justifyContent="space-evenly"
-                  direction="column"
-                  style={{ paddingLeft: "10%" }}
+          <Paper
+            elevation={15}
+            style={{ height: "85vh", width: "90%", padding: "3%", marginTop: mob ? '4%' : 0 }}
+          >
+            <Grid container justifyContent="center" spacing={2} sx={{width: '100%'}}>
+              <Grid item xs={12}>
+                <Typography
+                  variant={ tab ? "h3" : "h2"}
+                  sx={{
+                    fontFamily: "Montserrat, sans serrif",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
-                  <Grid item xs={2}>
-                    <div className="header-small">Appointments</div>
-                  </Grid>
-                  <Grid item xs={1}>
-                    <TextField
-                      id="outlined-search"
-                      label="Search"
-                      type="search"
-                      onChange={(e) => {
-                        setSearch(e.target.value);
-                      }}
-                      InputProps={{
-                        endAdornment: <SearchIcon />,
-                      }}
-                      style={{ width: "90%" }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  xs={9}
-                  justifyContent="center"
-                  style={{ overflow: "auto" }}
-                >
-                  <Chats search={search} />
-                </Grid>
-                <Divider orientation="vertical" light={false} />
+                  Welcome, Doctor!
+                </Typography>
+                <Divider />
               </Grid>
-              <Grid item xs={8}>
-                {selected ? (
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      background: "#ECECEC",
-                    }}
-                  >
-                    <header style={{ height: "8%", marginTop: "1%" }}>
-                      <Container sx={{ width: "100%", height: "100%" }}>
-                        <Grid container spacing={1}>
-                          <Grid item xs={1}>
-                            <Avatar
-                              alt="Remy Sharp"
-                              src=""
-                              sx={{ width: 40, height: 40 }}
-                            >
-                              {selected?.name[0]}
-                            </Avatar>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <h2>{selected?.name}</h2>
-                          </Grid>
-                        </Grid>
-                      </Container>
-                    </header>
-                    <Divider />
-                    <div
-                      style={{
-                        height: "82%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginLeft: "0.2%",
-                        backgroundImage: `url(${bg})`,
-                        backgroundPositionX: 'center',
-                        backgroundPositionY: 'top',
-                        backgroundSize: 'cover',
-                      }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          backgroundColor: "rgba(255, 255, 255, 0.4)",
-                          overflow: "auto",
-                        }}
-                      >
-                        {socket ? <Messages socket={socket} /> : <></>}
-                        <div ref={ref} />
-                      </div>
-                    </div>
-                    <Divider />
-                    <footer
-                      style={{
-                        height: "10%",
-                        display: "flex",
-                        alignItems: "center",
-                        padding: "1%",
-                        justifyContent: "space-between",
-                        background: "#ECECEC",
-                      }}
-                    >
-                      <MessageInput />
-                    </footer>
-                  </div>
-                ) : (
-                  <Grid container sx={{ height: "90%" }}>
-                    <Grid
-                      item
-                      xs={12}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <object
-                        type="image/svg+xml"
-                        data={notSelected}
-                        style={{ height: "auto", width: "60%" }}
-                      >
-                        <img src={notSelected} />
-                      </object>
-                      <Divider />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Typography
-                        component="h2"
-                        variant="h5"
-                        xs={{ width: "50%" }}
-                      >
-                        Click on an Appointment to open Chat!
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                )}
+              <Grid item xs={12}>
+                <Typography
+                  variant="h4"
+                  sx={{ fontFamily: "Montserrat, sans serrif", pl: "3%" }}
+                >
+                  You have -
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontFamily: "Montserrat, sans serrif",
+                    fontWeight: "400",
+                    pl: "15%",
+                  }}
+                  data-aos="fade-right"
+                  data-aos-duration="1000"
+                >
+                  13
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontFamily: "Montserrat, sans serrif",
+                    fontWeight: "400",
+                    pl: "15%",
+                  }}
+                >
+                  appointments
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontFamily: "Montserrat, sans serrif",
+                    fontWeight: "400",
+                    pl: "15%",
+                  }}
+                  data-aos="fade-right"
+                  data-aos-duration="1000"
+                  data-aos-delay="500"
+                >
+                  3
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontFamily: "Montserrat, sans serrif",
+                    fontWeight: "400",
+                    pl: "15%",
+                  }}
+                >
+                  free slots
+                </Typography>
               </Grid>
             </Grid>
           </Paper>
-        </Box>
+        </Container>
       </main>
     </>
   );

@@ -8,4 +8,6 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const createappointment = (formdata) => API.post("/", formdata)
+export const getappointment = () => API.get(`/`);
+export const createappointment = (formdata) => API.post("/", formdata);
+export const changestatus = (app_id) => API.put(`/${app_id}`, formdata);

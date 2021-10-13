@@ -64,14 +64,14 @@ const Dash = () => {
     <main>
       <Container
         style={{
-          height: "100vh",
+          minHeight: "100vh",
           maxWidth: "100%",
           padding: "0%",
           margin: "0%",
         }}
       >
         <Navbar />
-        <Grid container sx={{ height: "100%" }}>
+        <Grid container sx={{ minHeight: "100vh" }}>
           <Grid
             container
             item
@@ -125,7 +125,7 @@ const Dash = () => {
                     >
                       You haven't finished any appointments yet!
                       <Link
-                        to="/appointments"
+                        to="/book"
                         style={{ textDecoration: "None" }}
                       >
                         {"\nBook an appointment!"}
@@ -181,7 +181,7 @@ const Dash = () => {
             item
             xs={4}
             alignItems="center"
-            justifyContent="center"
+            justifyContent="space-evenly"
             direction="column"
             style={{
               padding: "7% 1% 1% 1%",
@@ -190,7 +190,9 @@ const Dash = () => {
               backgroundPositionY: 'top',
               backgroundPositionX: 'left',
               backgroundSize: 'cover',
-              backgroundRepeat: 'none'
+              backgroundRepeat: 'none',
+              minHeight: '100vh',
+              height: '100%'
             }}
           >
             <Grid
@@ -244,25 +246,23 @@ const Dash = () => {
               <Grid
                 container
                 item
+                spacing={2}
                 xs={5}
-                direction="column"
                 justifyContent="center"
                 alignItems="center"
+                sx={{height: '100%'}}
               >
                 <Grid
                   item
-                  xs={4}
-                  sx={{ display: "flex", alignItems: "center" }}
+                  xs={12}
+                  sx={{ display: "flex", justifyContent: "center" }}
                 >
                   <Paper
                     elevation={2}
                     style={{
                       borderRadius: 15,
                       padding: "1%",
-                      display: "flex",
-                      justifyContent: "center",
                       backgroundColor: '#0072ff',
-
                     }}
                   >
                     <Grid
@@ -273,7 +273,7 @@ const Dash = () => {
                       <Grid
                         container
                         item
-                        xs={5}
+                        xs={4}
                         md={1}
                         lg={2}
                         justifyContent="center"
@@ -353,8 +353,8 @@ const Dash = () => {
                 {appointments.length > 1 && (
                   <Grid
                     item
-                    xs={5}
-                    sx={{ display: "flex", alignItems: "center" }}
+                    xs={12}
+                    sx={{ display: "flex", justifyContent: "center" }}
                   >
                     <Paper
                       elevation={2}
@@ -446,8 +446,8 @@ const Dash = () => {
                 {appointments.length > 2 && (
                   <Grid
                     item
-                    xs={2}
-                    sx={{ display: "flex", alignItems: "center" }}
+                    xs={12}
+                    sx={{ display: "flex", justifyContent: "center" }}
                   >
                     <Typography
                       component="h1"

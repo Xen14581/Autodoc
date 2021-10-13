@@ -1,17 +1,17 @@
 import "./sass/main.scss";
 import React, { useEffect } from "react";
 import DocHome from "../src/DoctorSide/DocHome";
-import Appointments from "../src/PatientSide/Appointments";
+// import Appointments from "../src/PatientSide/Appointments";
 import "./App.css";
 import Homepage from "./Homepage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import AOS from 'aos';
+import AOS from "aos";
 import "aos/dist/aos.css";
 import Doctors from "../src/PatientSide/Doctors";
 import Home from "../src/PatientSide/Home";
 import Notes from "../src/PatientSide/Notes";
 import PrivateRoute from "../src/Utilities/PrivateRoute";
-import Profile from "../src/PatientSide/Profile";
+// import Profile from "../src/PatientSide/Profile";
 import AdminHome from "../src/AdminSide/AdminHome";
 import AddDoctors from "../src/AdminSide/AddDoctors";
 import Specialization from "../src/AdminSide/Specialization";
@@ -31,12 +31,19 @@ import AddPrescriptions from "./DoctorSide/AddPrescriptions";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AnimateSharedLayout } from "framer-motion";
+
 import Landing from "./pages/Landing";
 import Login from "./pages/Login/";
 import Register from "./pages/Register/";
 import PatientDash from "./pages/Dash/Patient/";
 import DoctorDash from "./pages/Dash/Doctor";
 import AdminDash from "./pages/Dash/Admin";
+import Profile from "./pages/Profile";
+import Appointments from "./pages/Appointments";
+import Specialities from "./pages/Book/Specialities";
+import Book from "./pages/Book/";
+import AddSpeciality from "./pages/AddSpec";
 
 import OverLay from "./components/Overlay/";
 import Loader from "./components/Loader/";
@@ -60,8 +67,9 @@ function App() {
         draggable={false}
         pauseOnHover={false}
       />
-      <Router hashType="noslash">
-        <div className="App">
+      <AnimateSharedLayout type="crossfade">
+        <Router hashType="noslash">
+          <Route path={['/book/:id/:doc', '/book/:id']} component={Book} />
           <Switch>
             <Route path="/" exact component={Landing} />
             <Route path="/login" exact component={Login} />
@@ -69,21 +77,25 @@ function App() {
             <Route path="/dash" exact component={PatientDash} />
             <Route path="/docdash" exact component={DoctorDash} />
             <Route path="/admindash" exact component={AdminDash} />
+            <Route path="/profile" exact component={Profile} />
+            <Route path="/appointments" exact component={Appointments} />
+            <Route path="/book" exact component={Specialities} />
+            <Route path="/add-speciality" exact component={AddSpeciality} />
           </Switch>
           <Switch>
             <PrivatePatient path="/home" exact component={Home} />
-            <PrivatePatient
+            {/* <PrivatePatient
               path="/appointments"
               exact
               component={Appointments}
-            />
+            /> */}
             <PrivatePatient path="/notes/:d_id" exact component={Notes} />
             <PrivatePatient
               path="/doctors/:specialization"
               exact
               component={Doctors}
             />
-            <PrivateRoute path="/profile" exact component={Profile} />
+            {/* <PrivateRoute path="/profile" exact component={Profile} /> */}
             <PrivatePatient
               path="/doctorsnotes"
               exact
@@ -147,10 +159,10 @@ function App() {
               component={ViewAppointments}
             />
           </Switch>
-        </div>
-        <OverLay />
-        <Loader loading={true} height="100vh" width="100vw" />
-      </Router>
+          <OverLay />
+          <Loader loading={true} height="100vh" width="100vw" />
+        </Router>
+      </AnimateSharedLayout>
     </>
   );
 }

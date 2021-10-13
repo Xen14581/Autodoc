@@ -23,6 +23,9 @@ const OverLay = () => {
         }
       >
         <div className="overlay-content">
+          <Link to='/dash' onClick={() => dispatch({ type: "TOGGLE" })}>
+            Dashboard
+          </Link>
           <Link to='/profile' onClick={() => dispatch({ type: "TOGGLE" })}>
             My Profile
           </Link>

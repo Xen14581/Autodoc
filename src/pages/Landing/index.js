@@ -23,6 +23,7 @@ import bg from "../../assets/2328064.jpg";
 import nn from "../../assets/brain-neural-net.jpg";
 import bacefook from "../../assets/Bacefook.png";
 import spyke from "../../assets/Logo-Dark-Square.jpg";
+import logo from "../../assets/Autodoc(2).svg";
 
 const theme = createTheme();
 
@@ -47,7 +48,7 @@ const Landing = () => {
             >
               <Grid item xs={1}>
                 <Link to="/homepage">
-                  <img src={placeholder} style={{ height: "4em" }} alt="LOGO" />
+                  <img src={logo} style={{ height: "4em" }} alt="LOGO" />
                 </Link>
               </Grid>
               <Grid item xs={9}>
