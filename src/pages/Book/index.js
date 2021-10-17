@@ -79,7 +79,6 @@ const Book = ({ match }) => {
                   lg={4}
                   key={doc._id}
                   style={{ height: "100%" }}
-                  isSelected={doc._id === doc}
                 >
                   <div
                     className="card-content-container"

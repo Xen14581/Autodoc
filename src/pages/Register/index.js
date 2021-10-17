@@ -12,8 +12,10 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import placeholder from "../../assets/placeholder_robot.png";
 import { useDispatch } from "react-redux";
 import { SignUp } from "../../actions/auth";
 import autodoc from "../../assets/autodoc(1).svg";
@@ -32,7 +34,7 @@ const Register = () => {
   const emailRef = useRef();
   const passRef = useRef();
   const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -55,8 +57,7 @@ const Register = () => {
   };
 
   const Submit = () => {
-    console.log(login);
-    dispatch({ type: "LOAD" })
+    dispatch({ type: "LOAD" });
     dispatch(SignUp(login, history, () => dispatch({ type: "LOAD" })));
   };
 
@@ -149,6 +150,49 @@ const Register = () => {
                       align="left"
                     />
                   </Grid>
+                  <Grid item xs={12} style={{ width: "100%" }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DesktopDatePicker
+                        label="Date of Birth"
+                        inputFormat="dd/MM/yyyy"
+                        // value={profile.dob}
+                        // onChange={(e) =>
+                        //   setProfile((prev) => {
+                        //     console.log(e);
+                        //     return {
+                        //       ...prev,
+                        //       dob: e,
+                        //     };
+                        //   })
+                        // }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            fullWidth
+                            style={{
+                              margin: "5% 0",
+                              width: "90%",
+                            }}
+                          />
+                        )}
+                      />
+                      {/* <MobileDatePicker
+                        label="Date of Birth"
+                        inputFormat="dd/MM/yyyy"
+                        value={user.dob}
+                        renderInput={(params) => 
+                          <TextField 
+                            {...params} 
+                            fullWidth
+                            style={{
+                              margin: "5% 0",
+                              width: "90%",
+                            }} 
+                          />
+                        }
+                      /> */}
+                    </LocalizationProvider>
+                  </Grid>
                   <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
                     <TextField
                       error={emailError}
@@ -168,10 +212,6 @@ const Register = () => {
                   </Grid>
                   <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
                     <FormControl
-                      // className={clsx(
-                      //   classes.margin,
-                      //   classes.textField
-                      // )}
                       variant="outlined"
                       style={{
                         margin: "5% 0",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import {useSelector} from "react-redux";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -12,45 +13,17 @@ import { getChats } from "../../actions/chat";
 import noChats from "../../assets/doctors-animate.svg";
 
 const Chats = ({ search }) => {
-  // const chat = useSelector((state) => state.chat.chats);
-  const chat = [{
-    id: 0,
-    name: "Matt Murdoc",
-    slot: "10:00-10:30",
-    messages: [
-      {
-        sent: new Date(),
-        from: "Doctor",
-        type: "text",
-        message:
-          "Hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
-      },
-      {
-        sent: new Date(),
-        from: "Doctor",
-        type: "prescription",
-        message:
-          "Ibuprofin, Anaesthetic, Boiled water, Steam, Sauna, Trip to resort",
-      },
-      {
-        sent: new Date(),
-        from: "Doctor",
-        type: "note",
-        message: "Common Cold",
-      },
-      {
-        sent: new Date(),
-        from: "Patient",
-        type: "text",
-        message: "Thanks",
-      },
-    ],
-  }];
+  const chat = useSelector((state) => state.chat.chats);
+  // const chat = [
+  //   {
+  //     id: 0,
+  //     name: "Matt Murdoc",
+  //     slot: "10:00-10:30",
+  //   },
+  // ];
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [filtered, setFiltered] = useState([]);
   const dispatch = useDispatch();
-
-  console.log(chat)
 
   useEffect(() => {
     dispatch(getChats());
@@ -60,23 +33,31 @@ const Chats = ({ search }) => {
     setFiltered(
       chat?.filter((d) => d.name.toLowerCase().includes(search.toLowerCase()))
     );
-  }, []);
+  }, [chat, search]);
 
   return (
     <>
       {chat.length === 0 ? (
-        <Grid container direction='column'>
-          <Grid item xs={9} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <object type="image/svg+xml" data={noChats} style={{height: 'auto', width: '100%'}}>
-              <img src={noChats}/>
-            </object>
-          </Grid>
+        <Grid container direction="column">
           <Grid
             item
-            xs={3}
-            sx={{display: 'flex', justifyContent: 'center'}}
+            xs={9}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            <Typography component='h2' variant='h5'xs={{width: '50%'}}>
+            <object
+              type="image/svg+xml"
+              data={noChats}
+              style={{ height: "auto", width: "100%" }}
+            >
+              <img src={noChats} alt="No chats available" />
+            </object>
+          </Grid>
+          <Grid item xs={3} sx={{ display: "flex", justifyContent: "center" }}>
+            <Typography component="h2" variant="h5" xs={{ width: "50%" }}>
               No Appointments!
             </Typography>
           </Grid>

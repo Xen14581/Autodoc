@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import placeholder from "../../assets/placeholder_robot.png";
 import { useDispatch } from "react-redux";
 import { Signin } from "../../actions/auth";
 import autodoc from "../../assets/autodoc(1).svg";
@@ -27,7 +26,7 @@ const Login = () => {
   const emailRef = useRef();
   const passRef = useRef();
   const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -50,7 +49,6 @@ const Login = () => {
   };
 
   const Submit = () => {
-    console.log(login);
     dispatch({ type: "LOAD" });
     dispatch(Signin(login, history, () => dispatch({ type: "LOAD" })));
   };

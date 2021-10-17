@@ -10,13 +10,13 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
-import FormHelperText from '@mui/material/FormHelperText';
+import FormHelperText from "@mui/material/FormHelperText";
 import TimePicker from "@mui/lab/TimePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import Navbar from "../../../components/Navbar";
+import Navbar from "../../components/Navbar";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "center",
@@ -24,8 +24,8 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
-const AdminDash = () => {
-  document.title = "Admin Dash - Autodoc";
+const ManageDoc = () => {
+  document.title = "Manage Doctors - Autodoc";
   const height = window.innerHeight;
   const [doc, setDoc] = useState({
     name: "",
@@ -105,7 +105,7 @@ const AdminDash = () => {
             }}
           >
             <div className="header-medium">
-              Monitor Appointments
+              Add Doctors
               <Divider />
             </div>
             <Grid container>
@@ -380,7 +380,7 @@ const AdminDash = () => {
                     color: "red",
                     fontSize: "1em",
                     marginBottom: "1%",
-                    fontFamily: 'Montserrat'
+                    fontFamily: "Montserrat",
                   }}
                 >
                   * All fields are mandatory
@@ -411,4 +411,4 @@ const AdminDash = () => {
   );
 };
 
-export default AdminDash;
+export default ManageDoc;

@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Typography, Grid } from "@mui/material";
 import { CSSTransition } from "react-transition-group";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const System = (props) => {
   const ref1 = useRef();

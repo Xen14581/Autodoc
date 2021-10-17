@@ -1,10 +1,7 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -18,7 +15,6 @@ import Avatar from "@mui/material/Avatar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typed from "react-typed";
 import { useHistory } from "react-router-dom";
-import placeholder from "../../assets/placeholder_robot.png";
 import bg from "../../assets/2328064.jpg";
 import nn from "../../assets/brain-neural-net.jpg";
 import bacefook from "../../assets/Bacefook.png";

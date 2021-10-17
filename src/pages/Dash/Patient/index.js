@@ -5,23 +5,13 @@ import {
   Container,
   Typography,
   Divider,
-  Toolbar,
   Paper,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link, useHistory } from "react-router-dom";
 import Calendar from "react-calendar";
 import blob from '../../../assets/cal-bg.svg'
 import "react-calendar/dist/Calendar.css";
-
-const StyledToolbar = styled(Toolbar)(({ theme }) => ({
-  alignItems: "center",
-  paddingTop: theme.spacing(4),
-  paddingBottom: theme.spacing(2),
-  // "@media all": {
-  //   minHeight: 128,
-  // },
-}));
 
 const months = [
   "Jan",
@@ -60,6 +50,8 @@ const appointments = [
 
 const Dash = () => {
   const history = useHistory();
+  const mq12 = useMediaQuery("(max-width:1200px)");
+  const mq9 = useMediaQuery("(max-width:900px)");
   return (
     <main>
       <Container
@@ -79,7 +71,7 @@ const Dash = () => {
             direction="column"
             sx={{
               background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
-              padding: "7% 2% 2% 2%",
+              padding: `${mq9 ? '9%' : mq12 ? '8%' : '7%'} 2% 2% 2%`,
             }}
           >
             <Grid item xs={1}>
@@ -184,13 +176,8 @@ const Dash = () => {
             justifyContent="space-evenly"
             direction="column"
             style={{
-              padding: "7% 1% 1% 1%",
+              padding: `${mq9 ? '9%' : mq12 ? '8%' : '7%'} 2% 2% 2%`,
               boxShadow: "3px 0px 30px -3px rgba(66,66,66,0.75)",
-              backgroundImage: `url(${blob})`,
-              backgroundPositionY: 'top',
-              backgroundPositionX: 'left',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'none',
               minHeight: '100vh',
               height: '100%'
             }}

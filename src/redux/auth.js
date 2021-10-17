@@ -9,7 +9,7 @@ const reducer = (
         JSON.stringify({ ...action.data.result.data })
       );
       localStorage.setItem("token", action.data.result.token);
-      return { ...action.data.result };
+      return { ...action.data.result.data };
     case "UPDATE_PROFILE":
       const newstate = { ...action.data };
       localStorage.setItem("profile", JSON.stringify({ ...newstate }));

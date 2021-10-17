@@ -1,31 +1,39 @@
-import { login, signUp, updateprofilepic } from "../api/auth";
+import {
+  login,
+  signUp,
+  changepass,
+  updateprofilepic,
+  updateprofile,
+} from "../api/auth";
 import { toast } from "react-toastify";
 
 export const Signin = (formdata, router, state) => async (dispatch) => {
   try {
-    const res = await login(formdata);
-    dispatch({ type: "LOGIN", data: res.data });
+    const { data } = await login(formdata);
+    console.log(data);
+    dispatch({ type: "LOGIN", data: data });
     state();
     router.push("/dash");
   } catch (error) {
-    new Promise(resolve => setTimeout(resolve, 1000));
+    new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log(error);
     state();
     toast.error("Something went wrong!");
-    router.push("/dash"); ///////////////////// remove later
+    // router.push("/dash"); ///////////////////// remove later
   }
 };
 
 export const SignUp = (formdata, router, state) => async (dispatch) => {
   try {
     const res = await signUp(formdata);
-    dispatch({ type: "LOGIN", data: res.data });
+    dispatch({ type: "LOGIN", data: res });
     state();
     router.push("/dash");
   } catch (error) {
-    new Promise(resolve => setTimeout(resolve, 1000));
+    new Promise((resolve) => setTimeout(resolve, 1000));
     state();
     toast.error("Something went wrong!");
-    router.push("/dash"); ///////////////////// remove later
+    // router.push("/dash"); ///////////////////// remove later
   }
 };
 
@@ -36,12 +44,32 @@ export const Logout = (dispatch, router) => {
   } catch (error) {}
 };
 
-export const UpdateProfilePic = async (formdata) => async (dispatch) => {
+export const ChangePassword = (formdata, state) => async () => {
+  try {
+    await changepass(formdata);
+    toast("Password Changed");
+    state();
+  } catch (error) {
+    toast.error("Something went wrong!");
+  }
+};
+
+export const UpdateProfilePic = (formdata) => async (dispatch) => {
   try {
     const { data } = await updateprofilepic(formdata);
     if (data.message) {
       dispatch({ type: "UPDATE_PROFILE", data: data.result });
     }
+  } catch (error) {
+    toast.error("Something went wrong!");
+  }
+};
+
+export const UpdateProfile = (formdata, state) => async () => {
+  try {
+    await updateprofile(formdata);
+    toast("Profile Updated!");
+    state();
   } catch (error) {
     toast.error("Something went wrong!");
   }
