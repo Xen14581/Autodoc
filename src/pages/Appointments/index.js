@@ -47,7 +47,7 @@ const Appointments = () => {
 
   useEffect(() => {
     // const newSocket = io(`http://${window.location.hostname}:8000`);
-    const newSocket = io(`ws://api-autodoc.herokuapp.com`,{transports: ['websocket']});
+    const newSocket = io(`https://api-autodoc.herokuapp.com`,{transports: ['websocket']});
     setSocket(newSocket);
     return () => newSocket.close();
   }, [setSocket]);
