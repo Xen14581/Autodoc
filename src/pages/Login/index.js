@@ -12,12 +12,15 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { Signin } from "../../actions/auth";
 import autodoc from "../../assets/autodoc(1).svg";
+import logo from "../../assets/Autodoc(2).svg";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Login = () => {
+  const screen = useMediaQuery("(max-width:899px)");
   const [login, setLogin] = useState({ email: "", password: "" });
   const [emailError, setEmailError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -25,8 +28,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const emailRef = useRef();
   const passRef = useRef();
-  const emailRegex =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  // const emailRegex =
+  //   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -75,6 +78,7 @@ const Login = () => {
             style={{
               background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
               borderRadius: "0 80px 80px 0",
+              display: screen ? "none" : "",
             }}
           >
             <Grid item>
@@ -95,7 +99,7 @@ const Login = () => {
             justifyContent="center"
             style={{
               backgroundColor: "#f3f3f3",
-              borderRadius: "80px 0 0 0",
+              borderRadius: screen ? "0" : "80px 0 0 0",
               width: "100%",
             }}
           >
@@ -103,12 +107,11 @@ const Login = () => {
               <div
                 className="neu-paper"
                 style={{
-                  height: "50%",
-                  width: "50%",
+                  width: "70%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  padding: "1%",
+                  margin: screen ? '0' : ''
                 }}
               >
                 <Grid
@@ -117,6 +120,13 @@ const Login = () => {
                   alignItems="center"
                   style={{ padding: "3%" }}
                 >
+                  <Grid item xs={12}>
+                    <img
+                      src={logo}
+                      style={{ height: "6em", display: screen ? "" : "none" }}
+                      alt="LOGO"
+                    />
+                  </Grid>
                   <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
                     <Typography
                       variant="h3"

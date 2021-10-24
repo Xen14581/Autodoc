@@ -1,74 +1,87 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
-import FormHelperText from '@mui/material/FormHelperText';
-import TimePicker from "@mui/lab/TimePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "@mui/material/Button";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import Navbar from "../../../components/Navbar";
+import { getAppointmentsAdmin } from "../../../actions/appointments";
 
+import { useDispatch, useSelector } from "react-redux";
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "center",
   paddingTop: theme.spacing(3),
   marginBottom: theme.spacing(2),
 }));
 
+function createData(p_name, d_name, date, slot) {
+  return { p_name, d_name, date, slot };
+}
+
 const AdminDash = () => {
   document.title = "Admin Dash - Autodoc";
-  const height = window.innerHeight;
+  const tab = useMediaQuery("(max-width:630px)");
+  const dispatch = useDispatch();
+  const reports = useSelector((state) => state.appointments.reports);
   const [doc, setDoc] = useState({
-    name: "",
-    age: "",
-    sex: "",
-    speciality: "",
-    email: "",
-    ph_no: "",
-    shift_from: new Date(),
-    shift_to: new Date(),
-    week_from: "",
-    week_to: "",
+    from: new Date(),
+    to: new Date(),
   });
-
-  const name_ref = useRef(null);
-  const age_ref = useRef(null);
-  const sex_ref = useRef(null);
-  const spec_ref = useRef(null);
-  const email_ref = useRef(null);
-  const ph_no_ref = useRef(null);
-  const shift_from_ref = useRef(null);
-  const shift_to_ref = useRef(null);
-  const week_from_ref = useRef(null);
-  const week_to_ref = useRef(null);
-
-  const handleInput = (obj) => {
-    const { name, value } = obj.target;
-    setDoc((prev) => {
-      return { ...prev, [name]: value };
-    });
-  };
-
-  const handleChange = (event) => {
-    setDoc((prev) => {
-      return { ...prev, sex: event.target.value };
-    });
-  };
+  const [rows, setRows] = useState([]);
 
   const handleShift = (event, name) => {
     setDoc((prev) => {
       return { ...prev, [name]: event };
     });
   };
+
+  const Submit = () => {
+    dispatch(getAppointmentsAdmin(doc));
+  };
+
+  useEffect(() => {
+    reports.map((report) => {
+      setRows((prev) => {
+        return !prev.includes(
+          createData(
+            report?.patient_id.name,
+            report?.doctor_id.name,
+            report?.slot.date,
+            report?.slot.slot
+          )
+        )
+          ? [
+              ...prev,
+              createData(
+                report?.patient_id.name,
+                report?.doctor_id.name,
+                report?.slot.date,
+                report?.slot.slot
+              ),
+            ]
+          : prev;
+      });
+      return report;
+    });
+    return () => {
+      setRows([]);
+    };
+  }, [reports]);
 
   return (
     <>
@@ -79,14 +92,12 @@ const AdminDash = () => {
           backgroundImage: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
           backgroundPosition: "center",
           backgroundSize: "cover",
+          minHeight: "100vh",
         }}
       >
         <Container
           style={{
-            height: { height },
             maxWidth: "100%",
-            // padding: "0%",
-            // margin: "0%",
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
@@ -97,14 +108,14 @@ const AdminDash = () => {
           <Paper
             elevation={12}
             sx={{
-              width: "50%",
+              width: tab ? "90%" : "50%",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               padding: "2%",
             }}
           >
-            <div className="header-medium">
+            <div className="header-tiny" style={{ fontWeight: "900" }}>
               Monitor Appointments
               <Divider />
             </div>
@@ -112,279 +123,64 @@ const AdminDash = () => {
               <Grid
                 item
                 xs={12}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <div className="header-tiny">
-                  Personal Details
-                  <Divider />
-                </div>
-              </Grid>
-              <Grid
-                item
-                xs={12}
                 md={6}
                 lg={6}
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: "3% 0",
+                }}
               >
-                <TextField
-                  variant="outlined"
-                  inputRef={name_ref}
-                  label="Full Name"
-                  name="name"
-                  onChange={handleInput}
-                  style={{
-                    margin: "3% 0",
-                    width: "90%",
-                  }}
-                  align="left"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <TextField
-                  variant="outlined"
-                  inputRef={age_ref}
-                  label="Age"
-                  name="age"
-                  onChange={handleInput}
-                  style={{
-                    margin: "3% 0",
-                    width: "90%",
-                  }}
-                  align="left"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <FormControl sx={{ width: "90%", margin: "3% 0" }}>
-                  <InputLabel id="demo-simple-select-label">Sex</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={doc.sex}
-                    label="Sex"
-                    onChange={handleChange}
-                    ref={sex_ref}
-                  >
-                    <MenuItem value={"Male"}>Male</MenuItem>
-                    <MenuItem value={"Female"}>Female</MenuItem>
-                    <MenuItem value={"Other"}>Other</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <TextField
-                  variant="outlined"
-                  inputRef={spec_ref}
-                  label="Speciality"
-                  name="speciality"
-                  onChange={handleInput}
-                  style={{
-                    margin: "3% 0",
-                    width: "90%",
-                  }}
-                  align="left"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <TextField
-                  variant="outlined"
-                  inputRef={email_ref}
-                  label="Email"
-                  name="email"
-                  onChange={handleInput}
-                  style={{
-                    margin: "3% 0",
-                    width: "90%",
-                  }}
-                  align="left"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <TextField
-                  variant="outlined"
-                  inputRef={ph_no_ref}
-                  label="Phone No."
-                  name="ph_no"
-                  onChange={handleInput}
-                  style={{
-                    margin: "3% 0",
-                    width: "90%",
-                  }}
-                  align="left"
-                />
-              </Grid>
-              <Grid container item xs={12}>
-                <Grid
-                  item
-                  xs={12}
-                  sx={{ display: "flex", justifyContent: "center" }}
-                >
-                  <div className="header-tiny">
-                    Shift Timings
-                    <Divider />
-                  </div>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  lg={6}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "3% 0",
-                  }}
-                >
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <TimePicker
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  {tab ? (
+                    <MobileDatePicker
                       label="From"
-                      ref={shift_from_ref}
-                      value={doc.shift_from}
-                      onChange={(e) => handleShift(e, "shift_from")}
-                      style={{
-                        margin: "3% 0",
-                        width: "90%",
-                      }}
+                      inputFormat="dd/MM/yyyy"
+                      value={doc.from}
+                      onChange={(e) => handleShift(e, "from")}
                       renderInput={(params) => <TextField {...params} />}
                     />
-                  </LocalizationProvider>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  lg={6}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "3% 0",
-                  }}
-                >
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <TimePicker
-                      label="To"
-                      ref={shift_to_ref}
-                      value={doc.shift_to}
-                      onChange={(e) => handleShift(e, "shift_to")}
-                      style={{
-                        margin: "3% 0",
-                        width: "90%",
-                      }}
+                  ) : (
+                    <DesktopDatePicker
+                      label="From"
+                      inputFormat="dd/MM/yyyy"
+                      value={doc.from}
+                      onChange={(e) => handleShift(e, "from")}
                       renderInput={(params) => <TextField {...params} />}
                     />
-                  </LocalizationProvider>
-                </Grid>
+                  )}
+                </LocalizationProvider>
               </Grid>
-              <Grid container item xs={12}>
-                <Grid
-                  item
-                  xs={12}
-                  sx={{ display: "flex", justifyContent: "center" }}
-                >
-                  <div className="header-tiny">
-                    Workdays
-                    <Divider />
-                  </div>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  lg={6}
-                  sx={{ display: "flex", justifyContent: "center" }}
-                >
-                  <FormControl sx={{ width: "90%", margin: "3% 0" }}>
-                    <InputLabel id="demo-simple-select-label">From</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={doc.week_from}
-                      name="week_from"
-                      label="From"
-                      onChange={handleInput}
-                      ref={week_from_ref}
-                    >
-                      <MenuItem value={"Monday"}>Monday</MenuItem>
-                      <MenuItem value={"Tuesday"}>Tuesday</MenuItem>
-                      <MenuItem value={"Wednesday"}>Wednesday</MenuItem>
-                      <MenuItem value={"Thursday"}>Thursday</MenuItem>
-                      <MenuItem value={"Friday"}>Friday</MenuItem>
-                      <MenuItem value={"Saturday"}>Saturday</MenuItem>
-                      <MenuItem value={"Sunday"}>Sunday</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  lg={6}
-                  sx={{ display: "flex", justifyContent: "center" }}
-                >
-                  <FormControl sx={{ width: "90%", margin: "3% 0" }}>
-                    <InputLabel id="demo-simple-select-label">To</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={doc.week_to}
-                      name="week_to"
+              <Grid
+                item
+                xs={12}
+                md={6}
+                lg={6}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: "3% 0",
+                }}
+              >
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  {tab ? (
+                    <MobileDatePicker
                       label="To"
-                      onChange={handleInput}
-                      ref={week_to_ref}
-                    >
-                      <MenuItem value={"Monday"}>Monday</MenuItem>
-                      <MenuItem value={"Tuesday"}>Tuesday</MenuItem>
-                      <MenuItem value={"Wednesday"}>Wednesday</MenuItem>
-                      <MenuItem value={"Thursday"}>Thursday</MenuItem>
-                      <MenuItem value={"Friday"}>Friday</MenuItem>
-                      <MenuItem value={"Saturday"}>Saturday</MenuItem>
-                      <MenuItem value={"Sunday"}>Sunday</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-              <Grid item xs={12}>
-                <FormHelperText
-                  id="outlined-weight-helper-text"
-                  style={{
-                    textAlign: "center",
-                    color: "red",
-                    fontSize: "1em",
-                    marginBottom: "1%",
-                    fontFamily: 'Montserrat'
-                  }}
-                >
-                  * All fields are mandatory
-                </FormHelperText>
+                      inputFormat="dd/MM/yyyy"
+                      value={doc.to}
+                      onChange={(e) => handleShift(e, "to")}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  ) : (
+                    <DesktopDatePicker
+                      label="To"
+                      inputFormat="dd/MM/yyyy"
+                      value={doc.to}
+                      onChange={(e) => handleShift(e, "to")}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  )}
+                </LocalizationProvider>
               </Grid>
               <Grid
                 item
@@ -395,14 +191,50 @@ const AdminDash = () => {
                   variant="contained"
                   className="login-button"
                   onClick={() => {
-                    // Submit();
-                    console.log(doc);
+                    Submit();
                   }}
                   sx={{ width: "60%" }}
                 >
-                  Register Doctor
+                  Get Appointments
                 </Button>
               </Grid>
+              {reports.length > 0 && (
+                <Grid item xs={12} style={{ marginTop: "4%" }}>
+                  <TableContainer component={Paper}>
+                    <Table
+                      // sx={{ minWidth: 650 }}
+                      size="small"
+                      aria-label="a dense table"
+                    >
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Patient Name</TableCell>
+                          <TableCell>Doctor Name</TableCell>
+                          <TableCell>Date</TableCell>
+                          <TableCell>Slot</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map((row, index) => (
+                          <TableRow
+                            key={index}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {row.p_name}
+                            </TableCell>
+                            <TableCell>{row.d_name}</TableCell>
+                            <TableCell>{row.date}</TableCell>
+                            <TableCell>{row.slot}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid>
+              )}
             </Grid>
           </Paper>
         </Container>

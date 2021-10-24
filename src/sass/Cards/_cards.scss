@@ -119,6 +119,7 @@
   z-index: 2;
   overflow: hidden;
   padding-top: 7%;
+  height: 100vh;
 }
 
 .card-content {
@@ -138,9 +139,10 @@
   position: relative;
   border-radius: 20px;
   background: #1c1c1e;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   margin: 0 auto;
+  height: 100vh;
 }
 
 .open .card-content {
@@ -162,12 +164,24 @@
 }
 
 .card-image-container {
-  // position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   overflow: hidden;
-  height: 420px;
-  width: 100vw;
+  height: 350px;
+  width: 100%;
+}
+
+.card-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#clip {
+  position: absolute;
+  clip: rect(0, 900, 0, 500);
+  /* clip: shape(top, right, bottom, left); NB 'rect' is the only available option */
 }
 
 .open .card-image-container,
@@ -216,15 +230,21 @@
   top: 0;
   bottom: 0;
   width: 100vw;
+  height: 100vh;
   left: 50%;
   z-index: 1;
   transform: translateX(-50%);
 }
 
 .content-container {
-  padding: 460px 35px 35px 35px;
-  max-width: 700px;
-  width: 90vw;
+  // padding: 460px 35px 35px 35px;
+  // max-width: 700px;
+  width: 100%;
+  margin: 0;
+}
+
+.content-container * {
+  color: white !important;
 }
 
 // p {

@@ -1,6 +1,5 @@
 import "./sass/main.scss";
 import React, { useEffect } from "react";
-import "./App.css";
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,6 +26,7 @@ import Specialities from "./pages/Book/Specialities";
 import Book from "./pages/Book/";
 import AddSpeciality from "./pages/EditSpec";
 import ManageDoc from "./pages/ManageDoc";
+import Diagnosis from "./pages/Diagnosis";
 
 import Sidebar from "./components/Sidebar/";
 import Loader from "./components/Loader/";
@@ -54,7 +54,7 @@ function App() {
       />
       <AnimateSharedLayout type="crossfade">
         <Router hashType="noslash">
-          <Route path={["/book/:id/:doc", "/book/:id"]} component={Book} />
+          <Route path={["/book/:id/:doc", "/book/:id/"]} component={Book} />
           <Switch>
             <Route path="/" exact component={Landing} />
             <Route path="/login" exact component={Login} />
@@ -70,25 +70,6 @@ function App() {
                     user.role === "admin" && <AdminDash />
                   )}
                 </Route>
-                <Route path="/docdash" exact>
-                  {/* {user.role === "patient" ? (
-                    <Redirect to="/dash" />
-                  ) : user.role === "doctor" ? ( */}
-                    <DoctorDash />
-                  {/* ) : (
-                    user.role === "admin" && <Redirect to="/admindash" />
-                  )} */}
-                </Route>
-                <Route path="/admindash" exact>
-                  {/* {user.role === "patient" ? (
-                    <Redirect to="/dash" />
-                  ) : user.role === "doctor" ? (
-                    <Redirect to="/docdash" />
-                  ) : (
-                    user.role === "admin" &&  */}
-                    <AdminDash />
-                  {/* )} */}
-                </Route>
                 <Route path="/profile" exact component={Profile} />
                 <Route path="/appointments" exact>
                   <Appointments />
@@ -97,10 +78,21 @@ function App() {
                   <Specialities />
                 </Route>
                 <Route path="/edit-speciality" exact>
-                  <AddSpeciality />
+                  {user.role === "admin" ? (
+                    <AddSpeciality />
+                  ) : (
+                    <Redirect to="/dash" />
+                  )}
                 </Route>
                 <Route path="/manage-doc" exact>
-                  <ManageDoc />
+                  {user.role === "admin" ? (
+                    <ManageDoc />
+                  ) : (
+                    <Redirect to="/dash" />
+                  )}
+                </Route>
+                <Route path="/checkup" exact>
+                  <Diagnosis />
                 </Route>
               </>
             ) : (

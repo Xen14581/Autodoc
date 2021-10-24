@@ -1,39 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
-import p from "../../../assets/brain-neural-net.jpg";
+import { useSelector, useDispatch } from "react-redux";
 import { baseurl } from "../../../api/url";
+import { getSpeciality } from "../../../actions/speciality";
+import { styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  alignItems: "center",
+  paddingTop: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+}));
 
 const Specialities = () => {
+  document.title='Specialities - Autodoc'
   const history = useHistory();
-  const specialities = [
-    {
-      _id: "831nf813nc9dnv839qf",
-      name: "Cardiologist",
-      src: "",
-    },
-    {
-      _id: "9247rbfvf9q83nfq783",
-      name: "Pediatrician",
-      src: "",
-    },
-    {
-      _id: "8245ffj85rh94wh8v9w4h",
-      name: "Magician",
-      src: "",
-    },
-    {
-      _id: "N8QF938977G427o47t97h4",
-      name: "Dentist",
-      src: "",
-    },
-  ];
+  const dispatch = useDispatch();
+  const specs = useSelector((state) => state.speciality.speciality);
+
+  useEffect(() => {
+    dispatch(getSpeciality());
+  }, [dispatch]);
+
   return (
     <>
       <Navbar />
@@ -46,12 +41,12 @@ const Specialities = () => {
           maxWidth: "100%",
           background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
           overflow: "hidden",
+          minHeight: "100vh",
         }}
       >
+        <StyledToolbar />
         <Container
           style={{
-            paddingTop: "7%",
-            minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -70,7 +65,7 @@ const Specialities = () => {
             spacing={2}
             style={{ padding: "2%" }}
           >
-            {specialities.map((spec) => {
+            {specs.map((spec) => {
               return (
                 <Grid
                   item
@@ -95,8 +90,8 @@ const Specialities = () => {
                       >
                         <img
                           className="card-image"
-                          // src={`${baseurl}/${spec.src}`}
-                          src={p}
+                          src={baseurl + "/" + spec.image}
+                          // src={p}
                           alt=""
                         />
                       </motion.div>
@@ -104,7 +99,7 @@ const Specialities = () => {
                         className="title-container"
                         layoutId={`title-container-${spec._id}`}
                       >
-                        <h2>{spec.name}</h2>
+                        <h2>{spec.speciality}</h2>
                       </motion.div>
                     </motion.div>
                   </div>

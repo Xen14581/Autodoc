@@ -4,16 +4,16 @@ import { toast } from "react-toastify";
 export const getDoctors = (speciality) => async () => {
   try {
     const { data } = await getdoctors(speciality);
-    return data;
+    return data.result;
   } catch (error) {
     toast("Something went wrong!");
   }
 };
 
-export const getsingledoctor = (id) => async () => {
+export const getSingleDoctor = (id) => async () => {
   try {
     const { data } = await getsingledoctor(id);
-    return data;
+    return data.result;
   } catch (error) {
     toast("Something went wrong!");
   }

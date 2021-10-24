@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -14,9 +14,16 @@ import FormHelperText from "@mui/material/FormHelperText";
 import TimePicker from "@mui/lab/TimePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Navbar from "../../components/Navbar";
+import { useDispatch, useSelector } from "react-redux";
+import { createDoctor } from "../../actions/admin";
+import { toast } from "react-toastify";
+import { getSpeciality } from "../../actions/speciality";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "center",
@@ -26,11 +33,14 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 const ManageDoc = () => {
   document.title = "Manage Doctors - Autodoc";
+  const tab = useMediaQuery("(max-width:630px)");
   const height = window.innerHeight;
+  const dispatch = useDispatch();
+  const specs = useSelector((state) => state.speciality.speciality);
   const [doc, setDoc] = useState({
     name: "",
-    age: "",
-    sex: "",
+    dob: new Date(),
+    gender: "",
     speciality: "",
     email: "",
     ph_no: "",
@@ -60,7 +70,7 @@ const ManageDoc = () => {
 
   const handleChange = (event) => {
     setDoc((prev) => {
-      return { ...prev, sex: event.target.value };
+      return { ...prev, gender: event.target.value };
     });
   };
 
@@ -69,6 +79,64 @@ const ManageDoc = () => {
       return { ...prev, [name]: event };
     });
   };
+
+  const Submit = () => {
+    if (doc.name === "") {
+      name_ref.current.focus();
+    } else if (doc.dob === new Date()) {
+      toast.error("Please enter date of birth.");
+    } else if (doc.gender === "") {
+      sex_ref.current.focus();
+    } else if (doc.speciality === "") {
+      spec_ref.current.focus();
+    } else if (doc.email === "") {
+      email_ref.current.focus();
+    } else if (doc.ph_no === "") {
+      ph_no_ref.current.focus();
+    } else if (
+      doc.shift_from.getHours() === new Date().getHours() &&
+      doc.shift_from.getMinutes() === new Date().getMinutes()
+    ) {
+      toast.error("Please enter correct shift timings.");
+    } else if (
+      doc.shift_to.getHours() === new Date().getHours() &&
+      doc.shift_to.getMinutes() === new Date().getMinutes()
+    ) {
+      toast.error("Please enter correct shift timings.");
+    } else if (doc.week_from === "") {
+      week_from_ref.current.focus();
+    } else if (doc.week_to === "") {
+      week_to_ref.current.focus();
+    } else {
+      dispatch({ type: "LOAD" });
+      setDoc((prev) => {
+        return {
+          ...prev,
+          shift_from: doc.shift_from.toTimeString().slice(0, 5),
+          shift_to: doc.shift_to.toTimeString().slice(0, 5),
+        };
+      });
+      createDoctor(doc, () => {
+        setDoc({
+          name: "",
+          dob: new Date(),
+          gender: "",
+          speciality: "",
+          email: "",
+          ph_no: "",
+          shift_from: new Date(),
+          shift_to: new Date(),
+          week_from: "",
+          week_to: "",
+        });
+        dispatch({ type: "LOAD" });
+      });
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getSpeciality());
+  }, [dispatch]);
 
   return (
     <>
@@ -97,7 +165,7 @@ const ManageDoc = () => {
           <Paper
             elevation={12}
             sx={{
-              width: "50%",
+              width: tab ? "90%" : "50%",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -131,6 +199,7 @@ const ManageDoc = () => {
                   inputRef={name_ref}
                   label="Full Name"
                   name="name"
+                  value={doc.name}
                   onChange={handleInput}
                   style={{
                     margin: "3% 0",
@@ -146,18 +215,46 @@ const ManageDoc = () => {
                 lg={6}
                 sx={{ display: "flex", justifyContent: "center" }}
               >
-                <TextField
-                  variant="outlined"
-                  inputRef={age_ref}
-                  label="Age"
-                  name="age"
-                  onChange={handleInput}
+                <Paper
+                  elevation={0}
                   style={{
-                    margin: "3% 0",
                     width: "90%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "3% 0",
                   }}
-                  align="left"
-                />
+                >
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    {tab ? (
+                      <MobileDatePicker
+                        label="Date of Birth"
+                        inputFormat="dd/MM/yyyy"
+                        value={doc.dob}
+                        onChange={(e) => handleShift(e, "dob")}
+                        inputRef={age_ref}
+                        renderInput={(params) => (
+                          <TextField {...params} style={{ width: "100%" }} />
+                        )}
+                        style={{
+                          margin: "3% 0",
+                          width: "90%",
+                        }}
+                      />
+                    ) : (
+                      <DesktopDatePicker
+                        label="Date of Birth"
+                        inputFormat="dd/MM/yyyy"
+                        value={doc.dob}
+                        onChange={(e) => handleShift(e, "dob")}
+                        inputRef={age_ref}
+                        renderInput={(params) => (
+                          <TextField {...params} style={{ width: "100%" }} />
+                        )}
+                      />
+                    )}
+                  </LocalizationProvider>
+                </Paper>
               </Grid>
               <Grid
                 item
@@ -171,7 +268,7 @@ const ManageDoc = () => {
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={doc.sex}
+                    value={doc.gender}
                     label="Sex"
                     onChange={handleChange}
                     ref={sex_ref}
@@ -189,18 +286,28 @@ const ManageDoc = () => {
                 lg={6}
                 sx={{ display: "flex", justifyContent: "center" }}
               >
-                <TextField
-                  variant="outlined"
-                  inputRef={spec_ref}
-                  label="Speciality"
-                  name="speciality"
-                  onChange={handleInput}
-                  style={{
-                    margin: "3% 0",
-                    width: "90%",
-                  }}
-                  align="left"
-                />
+                <FormControl sx={{ width: "90%", margin: "3% 0" }}>
+                  <InputLabel id="demo-simple-select-label">
+                    Speciality
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={doc.speciality}
+                    name="speciality"
+                    label="Speciality"
+                    onChange={handleInput}
+                    ref={spec_ref}
+                  >
+                    {specs.map((spec, index) => {
+                      return (
+                        <MenuItem key={index} value={spec._id}>
+                          {spec.speciality}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid
                 item
@@ -214,6 +321,7 @@ const ManageDoc = () => {
                   inputRef={email_ref}
                   label="Email"
                   name="email"
+                  value={doc.email}
                   onChange={handleInput}
                   style={{
                     margin: "3% 0",
@@ -234,6 +342,7 @@ const ManageDoc = () => {
                   inputRef={ph_no_ref}
                   label="Phone No."
                   name="ph_no"
+                  value={doc.ph_no}
                   onChange={handleInput}
                   style={{
                     margin: "3% 0",
@@ -274,7 +383,9 @@ const ManageDoc = () => {
                         margin: "3% 0",
                         width: "90%",
                       }}
-                      renderInput={(params) => <TextField {...params} />}
+                      renderInput={(params) => (
+                        <TextField {...params} style={{ width: "90%" }} />
+                      )}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -299,7 +410,9 @@ const ManageDoc = () => {
                         margin: "3% 0",
                         width: "90%",
                       }}
-                      renderInput={(params) => <TextField {...params} />}
+                      renderInput={(params) => (
+                        <TextField {...params} style={{ width: "90%" }} />
+                      )}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -395,8 +508,7 @@ const ManageDoc = () => {
                   variant="contained"
                   className="login-button"
                   onClick={() => {
-                    // Submit();
-                    console.log(doc);
+                    Submit();
                   }}
                   sx={{ width: "60%" }}
                 >

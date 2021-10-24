@@ -16,11 +16,16 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import bg from "../../assets/drawing-1.svg";
 import Messages from "../../components/Messages";
 import MessageInput from "../../components/MessageInput";
 import Chats from "../../components/Chats";
 import notSelected from "../../assets/online-doctor-animate.svg";
+import { baseurl } from "../../api/url";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
+import { useDispatch } from "react-redux";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "center",
@@ -30,13 +35,16 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 const Appointments = () => {
   document.title = "Appointments - Autodoc";
+  const tab = useMediaQuery("(max-width:899px)");
+  const dispatch = useDispatch();
   const selected = useSelector((state) => state.chat.selected);
+  const user = useSelector((state) => state.auth);
   const [socket, setSocket] = useState();
   const [search, setSearch] = useState("");
   const ref = useRef();
 
   useEffect(() => ref.current?.scrollIntoView());
-  
+
   useEffect(() => {
     const newSocket = io(`http://${window.location.hostname}:8000`);
     setSocket(newSocket);
@@ -69,17 +77,26 @@ const Appointments = () => {
           <StyledToolbar />
           <Paper elevation={15} style={{ height: "85vh", width: "90%" }}>
             <Grid container style={{ height: "100%" }}>
-              <Grid container item xs={4} direction="column">
+              <Grid
+                container
+                item
+                xs={12}
+                md={4}
+                direction="column"
+                style={{ display: tab && selected && "none", width: "100%" }}
+              >
                 <Grid
                   container
                   item
                   xs={3}
                   justifyContent="space-evenly"
                   direction="column"
-                  style={{ paddingLeft: "10%" }}
+                  style={{ paddingLeft: "10%", width: "100%" }}
                 >
                   <Grid item xs={2}>
-                    <div className="header-small">Appointments</div>
+                    <div className="header-tiny" style={{ fontWeight: "1000" }}>
+                      Appointments
+                    </div>
                   </Grid>
                   <Grid item xs={1}>
                     <TextField
@@ -107,7 +124,12 @@ const Appointments = () => {
                 </Grid>
                 <Divider orientation="vertical" light={false} />
               </Grid>
-              <Grid item xs={8}>
+              <Grid
+                item
+                xs={12}
+                md={8}
+                style={{ display: tab && !selected && "none" }}
+              >
                 {selected ? (
                   <div
                     style={{
@@ -120,17 +142,58 @@ const Appointments = () => {
                     <header style={{ height: "8%", marginTop: "1%" }}>
                       <Container sx={{ width: "100%", height: "100%" }}>
                         <Grid container spacing={1}>
-                          <Grid item xs={1}>
+                          {tab && (
+                            <Grid item xs={2}>
+                              <IconButton
+                                size="large"
+                                onClick={() => {
+                                  dispatch({
+                                    type: "SELECTEDCHAT",
+                                    data: null,
+                                  });
+                                }}
+                              >
+                                <ArrowBackIcon />
+                              </IconButton>
+                            </Grid>
+                          )}
+                          <Grid item xs={2}>
                             <Avatar
                               alt="Remy Sharp"
-                              src=""
+                              src={
+                                user.role === "patient"
+                                  ? selected.participants.doctor_id.profile_pic
+                                    ? baseurl +
+                                      "/" +
+                                      selected.participants.doctor_id
+                                        .profile_pic
+                                    : ""
+                                  : user.role === "doctor" &&
+                                    selected.participants.patient_id.profile_pic
+                                  ? baseurl +
+                                    "/" +
+                                    selected.participants.patient_id.profile_pic
+                                  : ""
+                              }
                               sx={{ width: 40, height: 40 }}
                             >
-                              {selected?.name[0]}
+                              {user.role === "patient"
+                                ? selected.participants.doctor_id.profile_pic
+                                  ? ""
+                                  : selected.participants.doctor_id.name[0]
+                                : user.role === "doctor" &&
+                                  selected.participants.patient_id.profile_pic
+                                ? ""
+                                : selected.participants.patient_id.name[0]}
                             </Avatar>
                           </Grid>
-                          <Grid item xs={6}>
-                            <h2>{selected?.name}</h2>
+                          <Grid item xs={8}>
+                            <h3 style={{ margin: "1% 0" }}>
+                              {user.role === "patient"
+                                ? selected.participants.doctor_id.name
+                                : user.role === "doctor" &&
+                                  selected.participants.patient_id.name}
+                            </h3>
                           </Grid>
                         </Grid>
                       </Container>
@@ -157,7 +220,7 @@ const Appointments = () => {
                           overflow: "auto",
                         }}
                       >
-                        {socket ? <Messages socket={socket} /> : <></>}
+                        {socket && <Messages socket={socket} />}
                         <div ref={ref} />
                       </div>
                     </div>
@@ -172,7 +235,7 @@ const Appointments = () => {
                         background: "#ECECEC",
                       }}
                     >
-                      <MessageInput />
+                      {socket && <MessageInput socket={socket} />}
                     </footer>
                   </div>
                 ) : (
@@ -191,7 +254,7 @@ const Appointments = () => {
                         data={notSelected}
                         style={{ height: "auto", width: "60%" }}
                       >
-                        <img src={notSelected} />
+                        <img src={notSelected} alt="not Selected" />
                       </object>
                       <Divider />
                     </Grid>

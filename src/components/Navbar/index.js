@@ -14,6 +14,7 @@ import Hamburger from "hamburger-react";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../assets/Autodoc(2).svg";
 import { Logout } from "../../actions/auth";
+import { baseurl } from "../../api/url";
 
 const Navbar = () => {
   const val = useSelector((state) => state.hamburger.Open);
@@ -23,6 +24,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const tab = useMediaQuery("(max-width:630px)");
+
   return (
     <AppBar
       position="fixed"
@@ -65,7 +67,7 @@ const Navbar = () => {
               <div>
                 <Avatar
                   alt="profile pic"
-                  src=""
+                  src={baseurl + "/" + user.profile_pic}
                   onClick={(e) => {
                     setOpen(!open);
                     setAnchor(e.currentTarget);
@@ -125,6 +127,10 @@ const Navbar = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItens: "center",
+                        borderBottom:
+                          history.location.pathname === "/checkup"
+                            ? "2px solid #0072ff"
+                            : "",
                       }}
                     >
                       AI Checkup
@@ -135,6 +141,10 @@ const Navbar = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItens: "center",
+                        borderBottom:
+                          history.location.pathname === "/book"
+                            ? "2px solid #0072ff"
+                            : "",
                       }}
                     >
                       Book Appointment
@@ -145,6 +155,10 @@ const Navbar = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItens: "center",
+                        borderBottom:
+                          history.location.pathname === "/appointments"
+                            ? "2px solid #0072ff"
+                            : "",
                       }}
                     >
                       View Appointments
@@ -158,6 +172,10 @@ const Navbar = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItens: "center",
+                        borderBottom:
+                          history.location.pathname === "/edit-speciality"
+                            ? "2px solid #0072ff"
+                            : "",
                       }}
                     >
                       Edit Specialities
@@ -168,6 +186,10 @@ const Navbar = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItens: "center",
+                        borderBottom:
+                          history.location.pathname === "/manage-doc"
+                            ? "2px solid #0072ff"
+                            : "",
                       }}
                     >
                       Manage Doctors
@@ -177,7 +199,7 @@ const Navbar = () => {
                 <div>
                   <Avatar
                     alt="profile pic"
-                    src=""
+                    src={baseurl + "/" + user.profile_pic}
                     onClick={(e) => {
                       setOpen(!open);
                       setAnchor(e.currentTarget);

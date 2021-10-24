@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useLayoutEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import {
   Grid,
   Container,
-  Box,
   Divider,
   Toolbar,
   Paper,
   CssBaseline,
-  TextField,
-  Avatar,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { getSlots } from "../../../actions/appointments";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "center",
@@ -24,8 +23,38 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 const DoctorDash = () => {
   document.title = "Dashboard - Autodoc";
+  const dispatch = useDispatch();
+  const [stats, setStats] = useState({
+    booked: 0,
+    not: 0,
+  });
   const tab = useMediaQuery("(max-width:680px)");
   const mob = useMediaQuery("(max-width:600px)");
+  const user = useSelector((state) => state.auth);
+
+  useLayoutEffect(() => {
+    const getData = async () => {
+      const data = await dispatch(getSlots(user._id, new Date()));
+      data?.map((slot) => {
+        slot?.booked
+          ? setStats((prev) => {
+              return {
+                ...prev,
+                booked: prev.booked + 1,
+              };
+            })
+          : setStats((prev) => {
+              return {
+                ...prev,
+                not: prev.not + 1,
+              };
+            });
+        return slot;
+      });
+    };
+    getData();
+  }, [dispatch, user._id]);
+
   return (
     <>
       <Navbar />
@@ -52,12 +81,22 @@ const DoctorDash = () => {
           <StyledToolbar />
           <Paper
             elevation={15}
-            style={{ height: "85vh", width: "90%", padding: "3%", marginTop: mob ? '4%' : 0 }}
+            style={{
+              height: "85vh",
+              width: "90%",
+              padding: "3%",
+              marginTop: mob ? "4%" : 0,
+            }}
           >
-            <Grid container justifyContent="center" spacing={2} sx={{width: '100%'}}>
+            <Grid
+              container
+              justifyContent="center"
+              spacing={2}
+              sx={{ width: "100%" }}
+            >
               <Grid item xs={12}>
                 <Typography
-                  variant={ tab ? "h3" : "h2"}
+                  variant={tab ? "h3" : "h2"}
                   sx={{
                     fontFamily: "Montserrat, sans serrif",
                     display: "flex",
@@ -73,7 +112,7 @@ const DoctorDash = () => {
                   variant="h4"
                   sx={{ fontFamily: "Montserrat, sans serrif", pl: "3%" }}
                 >
-                  You have -
+                  Today, you have -
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -87,7 +126,7 @@ const DoctorDash = () => {
                   data-aos="fade-right"
                   data-aos-duration="1000"
                 >
-                  13
+                  {stats.booked}
                 </Typography>
                 <Typography
                   variant="h5"
@@ -112,7 +151,7 @@ const DoctorDash = () => {
                   data-aos-duration="1000"
                   data-aos-delay="500"
                 >
-                  3
+                  {stats.not}
                 </Typography>
                 <Typography
                   variant="h5"

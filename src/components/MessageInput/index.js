@@ -5,8 +5,11 @@ import TextField from "@mui/material/TextField";
 import BubbleChartIcon from "@mui/icons-material/BubbleChart";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import SendIcon from "@mui/icons-material/Send";
+import { useSelector } from "react-redux";
 
 const MessageInput = ({ socket }) => {
+  const user = useSelector((state) => state.auth);
+  const selected = useSelector((state) => state.chat.selected);
   const [text, setText] = useState("");
   const [pres, setPres] = useState(false);
   const [note, setNote] = useState(false);
@@ -14,43 +17,49 @@ const MessageInput = ({ socket }) => {
   const handleSubmit = () => {
     if (text !== "") {
       if (pres) {
-        console.log(`Prescription: ${text}`);
+        socket.emit("new message", selected._id, text, "pres", user._id);
       } else if (note) {
-        console.log(`Note: ${text}`);
+        socket.emit("new message", selected._id, text, "note", user._id);
       } else {
-        console.log(`Message: ${text}`)
+        socket.emit("new message", selected._id, text, "text", user._id);
       }
     }
+    setText("");
   };
 
   return (
     <>
-      <IconButton
-        size="large"
-        onClick={() => {
-          setPres(!pres);
-          setNote(false);
-        }}
-        style={{ background: pres ? "#ffffff" : "" }}
-      >
-        <Tooltip title="Add Prescription">
-          <BubbleChartIcon />
-        </Tooltip>
-      </IconButton>
-      <IconButton
-        size="large"
-        onClick={() => {
-          setNote(!note);
-          setPres(false);
-        }}
-        style={{ background: note ? "#ffffff" : "" }}
-      >
-        <Tooltip title="Add Note">
-          <ContentPasteIcon />
-        </Tooltip>
-      </IconButton>
+      {user.role === "doctor" && (
+        <>
+          <IconButton
+            size="large"
+            onClick={() => {
+              setPres(!pres);
+              setNote(false);
+            }}
+            style={{ background: pres ? "#ffffff" : "" }}
+          >
+            <Tooltip title="Add Prescription">
+              <BubbleChartIcon />
+            </Tooltip>
+          </IconButton>
+          <IconButton
+            size="large"
+            onClick={() => {
+              setNote(!note);
+              setPres(false);
+            }}
+            style={{ background: note ? "#ffffff" : "" }}
+          >
+            <Tooltip title="Add Note">
+              <ContentPasteIcon />
+            </Tooltip>
+          </IconButton>
+        </>
+      )}
       <TextField
         id="outlined-search"
+        value={text}
         placeholder={
           pres ? "Add Prescriptions" : note ? "Add Notes" : "Type a message"
         }

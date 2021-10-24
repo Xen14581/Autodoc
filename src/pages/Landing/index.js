@@ -31,7 +31,7 @@ const Landing = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar
-          position="relative"
+          position="fixed"
           sx={{ backgroundColor: "white", zIndex: "100" }}
         >
           <Toolbar>
@@ -177,7 +177,7 @@ const Landing = () => {
                     data-aos-duration="1000"
                     data-aos-anchor-placement="center-bottom"
                   >
-                      <i class="fas fa-rocket fa-4x"></i>
+                      <i className="fas fa-rocket fa-4x"></i>
                     <CardContent sx={{ flexGrow: 1, padding: '8% 0' }}>
                       <Typography
                         gutterBottom
@@ -225,7 +225,7 @@ const Landing = () => {
                     data-aos-duration="1000"
                     data-aos-anchor-placement="center-bottom"
                   >
-                      <i class="fas fa-running fa-4x"></i>
+                      <i className="fas fa-running fa-4x"></i>
                     <CardContent sx={{ flexGrow: 1, padding: '8% 0' }}>
                       <Typography
                         gutterBottom
@@ -273,7 +273,7 @@ const Landing = () => {
                     data-aos-duration="1000"
                     data-aos-anchor-placement="center-bottom"
                   >
-                      <i class="fas fa-mobile fa-4x"></i>
+                      <i className="fas fa-mobile fa-4x"></i>
                     <CardContent sx={{ flexGrow: 1, padding: '8% 0' }}>
                       <Typography
                         gutterBottom

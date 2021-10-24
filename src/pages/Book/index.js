@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -10,29 +10,32 @@ import { motion } from "framer-motion";
 import { baseurl } from "../../api/url";
 import { AnimatePresence } from "framer-motion";
 import Doctor from "./Doctor/";
-import p from "../../assets/brain-neural-net.jpg";
+import { getDoctors } from "../../actions/doctors";
+import { useDispatch } from "react-redux";
+import { styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  alignItems: "center",
+  paddingTop: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+}));
 
 const Book = ({ match }) => {
-  let { doc } = match.params;
+  let { id, doc } = match.params;
   const imageHasLoaded = true;
   const history = useHistory();
-  const doctors = [
-    {
-      _id: "g84t2jh2494t8t48h",
-      name: "Dhrumil Vora",
-      src: ''
-    },
-    {
-      _id: "asrgubawr455",
-      name: "Dhrumil Vora",
-      src: ''
-    },
-    {
-      _id: "asrgliuawer8347",
-      name: "Dhrumil Vora",
-      src: ''
-    },
-  ];
+  const dispatch = useDispatch();
+  const [docs, setDocs] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await dispatch(getDoctors(id));
+      setDocs(data);
+    };
+    getData();
+  }, [id, dispatch]);
+
   return (
     <>
       <Navbar />
@@ -45,12 +48,12 @@ const Book = ({ match }) => {
           maxWidth: "100%",
           background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
           overflow: "hidden",
+          minHeight: "100vh",
         }}
       >
+        <StyledToolbar />
         <Container
           style={{
-            paddingTop: "7%",
-            minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -69,47 +72,52 @@ const Book = ({ match }) => {
             spacing={2}
             style={{ padding: "2%" }}
           >
-            {doctors.map((doc) => {
+            {docs.map((doc) => {
               return (
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={6}
-                  lg={4}
-                  key={doc._id}
-                  style={{ height: "100%" }}
-                >
-                  <div
-                    className="card-content-container"
-                    onClick={() =>
-                      !history.location.pathname.includes(doc._id) && history.push(`${history.location.pathname}/${doc._id}`)
-                    }
+                doc?.profile_pic && (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={4}
+                    key={doc._id}
+                    style={{ height: "100%" }}
                   >
-                    <motion.div
-                      className="card-content"
-                      layoutId={`card-container-${doc._id}`}
+                    <div
+                      className="card-content-container"
+                      onClick={() =>
+                        !history.location.pathname.includes(doc._id) &&
+                        history.push(`${history.location.pathname}/${doc._id}`)
+                      }
                     >
                       <motion.div
-                        className="card-image-container"
-                        layoutId={`card-image-container-${doc._id}`}
+                        className="card-content"
+                        layoutId={`card-container-${doc._id}`}
                       >
-                        <img
-                          className="card-image"
-                          // src={`${baseurl}/${doc.src}`}
-                          src={p}
-                          alt=""
-                        />
+                        <motion.div
+                          className="card-image-container"
+                          layoutId={`card-image-container-${doc._id}`}
+                          style={{
+                            backgroundImage: `url(${baseurl}/${doc?.profile_pic})`,
+                          }}
+                        >
+                          <img
+                            className="card-image"
+                            src={`${baseurl}/${doc?.profile_pic}`}
+                            alt=""
+                          />
+                        </motion.div>
+                        <motion.div
+                          className="title-container"
+                          layoutId={`title-container-${doc._id}`}
+                        >
+                          <h2>{doc.name}</h2>
+                        </motion.div>
                       </motion.div>
-                      <motion.div
-                        className="title-container"
-                        layoutId={`title-container-${doc._id}`}
-                      >
-                        <h2>{doc.name}</h2>
-                      </motion.div>
-                    </motion.div>
-                  </div>
-                </Grid>
+                    </div>
+                  </Grid>
+                )
               );
             })}
             <AnimatePresence>

@@ -10,6 +10,14 @@ const reducer = (state = { chats: [], selected: null }, action) => {
         ...state,
         selected: action.data
       }
+    case "ALLMESSAGE":
+      return {
+        ...state,
+        selected: {
+          ...state.selected,
+          messages: action.data
+        }
+      }
     default:
       return state
   }

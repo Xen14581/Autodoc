@@ -10,6 +10,8 @@ import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import ImageUploader from "react-images-upload";
 import { confirmAlert } from "react-confirm-alert";
@@ -37,14 +39,6 @@ const AddSpeciality = () => {
   });
 
   const specs = useSelector((state) => state.speciality.speciality);
-  // [
-  //   {speciality: 'Gynecologist', image: ''},
-  //   {speciality: 'Odontologist', image: ''},
-  //   {speciality: 'Optometrist', image: ''},
-  //   {speciality: 'Dentist', image: ''},
-  //   {speciality: 'Gynecologist', image: ''},
-  // ]
-
   const name_ref = useRef(null);
 
   const Submit = () => {
@@ -222,7 +216,7 @@ const AddSpeciality = () => {
                 </Grid>
               </Paper>
             </Grid>
-            {specs.length !== 0 ? (
+            {specs.length !== 0 && (
               <Grid
                 item
                 xs={12}
@@ -244,14 +238,39 @@ const AddSpeciality = () => {
                     Delete Speciality
                     <Divider />
                   </div>
-                  <Grid container>
-                    {specs.map((spec) => {
-                      return <></>;
+                  <Grid
+                    container
+                    justifyContent="center"
+                    style={{ margin: "2%" }}
+                  >
+                    {specs.map((spec, index) => {
+                      return (
+                        <Grid
+                          container
+                          item
+                          key={index}
+                          style={{ maxWidth: "50%" }}
+                        >
+                          <Grid item xs={10}>
+                            <Typography
+                              variant="h5"
+                              style={{ fontFamily: "Montserrat, sans serif" }}
+                            >
+                              {spec.speciality}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <IconButton onClick={() => Delete(spec._id)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      );
                     })}
                   </Grid>
                 </Paper>
               </Grid>
-            ) : null}
+            )}
           </Grid>
         </Container>
       </main>

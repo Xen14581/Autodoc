@@ -1,74 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
 import BubbleChartIcon from "@mui/icons-material/BubbleChart";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import { useSelector, useDispatch } from "react-redux";
 
 const Messages = ({ socket }) => {
-  const [messages, setMessages] = useState([
-    {
-      sent: new Date(),
-      from: "Doctor",
-      type: "text",
-      message:
-        "Hello. This is your friendly family doctor. I'm here for helping you out and treating you. I'll recommend you some things and write a note for later use.",
-    },
-    {
-      sent: new Date(),
-      from: "Doctor",
-      type: "prescription",
-      message:
-        "Ibuprofin, Anaesthetic, Boiled water, Steam, Sauna, Trip to resort",
-    },
-    {
-      sent: new Date(),
-      from: "Doctor",
-      type: "note",
-      message: "Common Cold",
-    },
-    {
-      sent: new Date(),
-      from: "Patient",
-      type: "text",
-      message: "Thanks",
-    },
-  ]);
+  const dispatch = useDispatch();
+  const selected = useSelector((state) => state.chat.selected);
+  const user = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const messageListener = (message) => {
-      setMessages((prevMessages) => {
-        const newMessages = { ...prevMessages };
-        newMessages[message.id] = message;
-        return newMessages;
-      });
-    };
-
-    const deleteMessageListener = (messageID) => {
-      setMessages((prevMessages) => {
-        const newMessages = { ...prevMessages };
-        delete newMessages[messageID];
-        return newMessages;
-      });
-    };
-
-    socket.on("message", messageListener);
-    socket.on("deleteMessage", deleteMessageListener);
-    socket.emit("getMessages");
-
-    return () => {
-      socket.off("message", messageListener);
-      socket.off("deleteMessage", deleteMessageListener);
-    };
-  }, [socket, setMessages]);
+    socket.emit("getmessages", selected._id);
+    socket.on("newmessage", (messages) => {
+      if (messages._id === selected._id) {
+        dispatch({ type: "ALLMESSAGE", data: messages.messages });
+      }
+    });
+    socket.on("messages", (messages) => {
+      if (messages._id === selected._id) {
+        dispatch({ type: "ALLMESSAGE", data: messages.messages });
+      }
+    });
+  }, [socket, dispatch, selected._id]);
 
   return (
     <>
-      {/* {[...Object.values(messages)]
-        .sort((a, b) => a.time - b.time)
-        .map((message) => 
-        ( */}
       <Paper
         elevation={0}
         sx={{
@@ -95,10 +54,10 @@ const Messages = ({ socket }) => {
               flexDirection: "column",
             }}
           >
-            {messages.map((m) => {
+            {selected.messages.map((m, index) => {
               return (
-                <>
-                  {m.from === "Patient" ? (
+                <React.Fragment key={index}>
+                  {m.sender_id !== user._id ? (
                     <Paper
                       sx={{
                         margin: "0.5% 0",
@@ -108,13 +67,45 @@ const Messages = ({ socket }) => {
                         borderRadius: "0px 15px 15px 15px",
                       }}
                     >
-                      <Typography
-                        variant="body1"
-                        component="span"
-                        style={{ wordWrap: "break-word" }}
-                      >
-                        {m.message}
-                      </Typography>
+                      {m.type === "text" ? (
+                        <Typography
+                          variant="body1"
+                          component="span"
+                          style={{ wordBreak: "break-word" }}
+                        >
+                          {m.message}
+                        </Typography>
+                      ) : m.type === "prescription" ? (
+                        <div style={{ display: "flex" }}>
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            style={{
+                              wordBreak: "break-word",
+                            }}
+                          >
+                            {m.message}
+                          </Typography>
+                          <Tooltip title="Prescription">
+                            <BubbleChartIcon sx={{ marginLeft: "1%" }} />
+                          </Tooltip>
+                        </div>
+                      ) : (
+                        <div style={{ display: "flex" }}>
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            style={{
+                              wordBreak: "break-word",
+                            }}
+                          >
+                            {m.message}
+                          </Typography>
+                          <Tooltip title="Note">
+                            <ContentPasteIcon sx={{ marginLeft: "1%" }} />
+                          </Tooltip>
+                        </div>
+                      )}
                     </Paper>
                   ) : (
                     <Paper
@@ -169,14 +160,12 @@ const Messages = ({ socket }) => {
                       )}
                     </Paper>
                   )}
-                </>
+                </React.Fragment>
               );
             })}
           </div>
         </Container>
       </Paper>
-      {/* )
-        )} */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import {
   Grid,
@@ -6,12 +6,19 @@ import {
   Typography,
   Divider,
   Paper,
+  Toolbar,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Calendar from "react-calendar";
-import blob from '../../../assets/cal-bg.svg'
 import "react-calendar/dist/Calendar.css";
+import { getAppointment } from "../../../actions/appointments";
+
+const StyledToolbar = styled(Toolbar)(() => ({
+  alignItems: "center",
+}));
 
 const months = [
   "Jan",
@@ -23,35 +30,28 @@ const months = [
   "Jul",
   "Aug",
   "Sep",
+  'Oct',
   "Nov",
   "Dec",
 ];
 
-const appointments = [
-  {
-    from_dt: new Date(2021, 9, 5, 10, 30),
-    to_dt: new Date(2021, 9, 5, 11, 0),
-    speciality: "Dermatologist",
-    doctor: "Doctor's Name",
-  },
-  {
-    from_dt: new Date(2021, 9, 7, 15, 0),
-    to_dt: new Date(2021, 9, 7, 16, 0),
-    speciality: "Optometrist",
-    doctor: "Doctor's Name",
-  },
-  {
-    from_dt: new Date(2021, 9, 8, 10, 30),
-    to_dt: new Date(2021, 9, 8, 11, 0),
-    speciality: "Dermatologist",
-    doctor: "Doctor's Name",
-  },
-];
+function addHoursToDate(date) {
+  const dat = new Date(date);
+  dat.setMinutes(dat.getMinutes() + 30);
+  dat.setHours(dat.getHours() + 5);
+  return dat;
+}
 
 const Dash = () => {
   const history = useHistory();
-  const mq12 = useMediaQuery("(max-width:1200px)");
-  const mq9 = useMediaQuery("(max-width:900px)");
+  const mq9 = useMediaQuery("(max-width:899px)");
+  const dispatch = useDispatch();
+  const appointments = useSelector((state) => state.appointments.apps);
+
+  useEffect(() => {
+    dispatch(getAppointment());
+  }, [dispatch]);
+
   return (
     <main>
       <Container
@@ -60,21 +60,26 @@ const Dash = () => {
           maxWidth: "100%",
           padding: "0%",
           margin: "0%",
+          background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
         }}
       >
         <Navbar />
-        <Grid container sx={{ minHeight: "100vh" }}>
+        <StyledToolbar />
+        <Grid container sx={{ minHeight: "91vh" }}>
           <Grid
             container
             item
-            xs={8}
-            direction="column"
+            xs={12}
+            md={8}
+            lg={8}
+            direction={mq9 ? "row" : "column"}
+            spacing={3}
+            justifyContent="center"
             sx={{
-              background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
-              padding: `${mq9 ? '9%' : mq12 ? '8%' : '7%'} 2% 2% 2%`,
+              padding: `2%`,
             }}
           >
-            <Grid item xs={1}>
+            <Grid item xs={12} md={1}>
               <Typography
                 component="h1"
                 variant="h2"
@@ -84,102 +89,111 @@ const Dash = () => {
                 Hello, User!
               </Typography>
             </Grid>
-            <Grid item xs={5}>
-              <Paper elevation={8}>
-                <Grid
-                  container
-                  alignItems="center"
-                  justifyContent="center"
-                  direction="column"
-                  style={{ padding: "8%" }}
-                >
-                  <Grid item style={{ padding: "0 0 3% 0" }}>
-                    <Typography
-                      variant="h5"
-                      color="text.primary"
-                      style={{
-                        fontFamily: "Montserrat, sans serif",
-                        fontWeight: "600",
-                      }}
-                    >
-                      Past Appointments
-                    </Typography>
-                    <Divider />
-                  </Grid>
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      color="text.secondary"
-                      style={{
-                        fontFamily: "Montserrat, sans serif",
-                        fontWeight: "400",
-                      }}
-                    >
-                      You haven't finished any appointments yet!
-                      <Link
-                        to="/book"
-                        style={{ textDecoration: "None" }}
+            <Grid
+              container
+              item
+              xs={10}
+              spacing={4}
+              direction={mq9 ? "column" : "row"}
+            >
+              <Grid item xs={5}>
+                <Paper elevation={8}>
+                  <Grid
+                    container
+                    alignItems="center"
+                    justifyContent="center"
+                    direction="column"
+                    style={{ padding: "8%" }}
+                  >
+                    <Grid item style={{ padding: "0 0 3% 0" }}>
+                      <Typography
+                        variant="h5"
+                        color="text.primary"
+                        style={{
+                          fontFamily: "Montserrat, sans serif",
+                          fontWeight: "600",
+                        }}
                       >
-                        {"\nBook an appointment!"}
-                      </Link>
-                    </Typography>
+                        Book Appointments
+                      </Typography>
+                      <Divider />
+                    </Grid>
+                    <Grid item>
+                      <Typography
+                        variant="h6"
+                        color="text.secondary"
+                        style={{
+                          fontFamily: "Montserrat, sans serif",
+                          fontWeight: "400",
+                        }}
+                      >
+                        Choose from the specialists on our site for your
+                        treatments! <br />
+                        <Link to="/book" style={{ textDecoration: "None" }}>
+                          {"\nBook an appointment!"}
+                        </Link>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
-            <Grid item xs={5}>
-              <Paper elevation={8}>
-                <Grid
-                  container
-                  alignItems="center"
-                  justifyContent="center"
-                  direction="column"
-                  style={{ padding: "8%" }}
-                >
-                  <Grid item style={{ padding: "0 0 3% 0" }}>
-                    <Typography
-                      variant="h5"
-                      color="text.primary"
-                      style={{
-                        fontFamily: "Montserrat, sans serif",
-                        fontWeight: "600",
-                      }}
-                    >
-                      AI diagnosis
-                    </Typography>
-                    <Divider />
+                </Paper>
+              </Grid>
+              <Grid item xs={5}>
+                <Paper elevation={8}>
+                  <Grid
+                    container
+                    alignItems="center"
+                    justifyContent="center"
+                    direction="column"
+                    style={{ padding: "8%" }}
+                  >
+                    <Grid item style={{ padding: "0 0 3% 0" }}>
+                      <Typography
+                        variant="h5"
+                        color="text.primary"
+                        style={{
+                          fontFamily: "Montserrat, sans serif",
+                          fontWeight: "600",
+                        }}
+                      >
+                        AI diagnosis
+                      </Typography>
+                      <Divider />
+                    </Grid>
+                    <Grid item>
+                      <Typography
+                        variant="h6"
+                        color="text.secondary"
+                        style={{
+                          fontFamily: "Montserrat, sans serif",
+                          fontWeight: "400",
+                        }}
+                      >
+                        Get a free health checkup from our AI!{" "}
+                        <Link to="/checkup" style={{ textDecoration: "None" }}>
+                          Go now!
+                        </Link>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Typography
-                      variant="h6"
-                      color="text.secondary"
-                      style={{
-                        fontFamily: "Montserrat, sans serif",
-                        fontWeight: "400",
-                      }}
-                    >
-                      Get a free health checkup from our AI!{" "}
-                      <Link to="/checkup" style={{ textDecoration: "None" }}>
-                        Go now!
-                      </Link>
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Paper>
+                </Paper>
+              </Grid>
             </Grid>
           </Grid>
           <Grid
             container
             item
-            xs={4}
+            xs={12}
+            md={4}
+            lg={4}
             alignItems="center"
             justifyContent="space-evenly"
             direction="column"
             style={{
-              padding: `${mq9 ? '9%' : mq12 ? '8%' : '7%'} 2% 2% 2%`,
+              padding: `2%`,
               boxShadow: "3px 0px 30px -3px rgba(66,66,66,0.75)",
-              minHeight: '100vh',
-              height: '100%'
+              minHeight: "91.5vh",
+              height: "100%",
+              background: "whitesmoke",
             }}
           >
             <Grid
@@ -220,8 +234,9 @@ const Dash = () => {
                     return view === "month" &&
                       appointments.some(
                         (appointment) =>
-                          appointment.from_dt.toDateString() ===
-                          date.toDateString()
+                          addHoursToDate(
+                            appointment.slot.date
+                          ).toDateString() === date.toDateString()
                       )
                       ? "appointment"
                       : "";
@@ -237,7 +252,7 @@ const Dash = () => {
                 xs={5}
                 justifyContent="center"
                 alignItems="center"
-                sx={{height: '100%'}}
+                sx={{ height: "100%" }}
               >
                 <Grid
                   item
@@ -249,7 +264,7 @@ const Dash = () => {
                     style={{
                       borderRadius: 15,
                       padding: "1%",
-                      backgroundColor: '#0072ff',
+                      backgroundColor: "#0072ff",
                     }}
                   >
                     <Grid
@@ -272,10 +287,16 @@ const Dash = () => {
                               padding: "0",
                               margin: "0%",
                               fontWeight: 600,
-                              color: 'white'
+                              color: "white",
                             }}
                           >
-                            {months[appointments[0].from_dt.getMonth()]}
+                            {
+                              months[
+                                addHoursToDate(
+                                  appointments[0].slot.date
+                                ).getMonth()
+                              ]
+                            }
                           </h3>
                         </Grid>
                         <Grid item xs={12}>
@@ -285,10 +306,12 @@ const Dash = () => {
                               padding: "0",
                               margin: "1%",
                               fontWeight: 600,
-                              color: 'white'
+                              color: "white",
                             }}
                           >
-                            {appointments[0].from_dt.getDate()}
+                            {addHoursToDate(
+                              appointments[0].slot.date
+                            ).getDate()}
                           </h2>
                         </Grid>
                         <Grid item xs={12}>
@@ -298,10 +321,12 @@ const Dash = () => {
                               padding: "0",
                               margin: "0%",
                               fontWeight: 600,
-                              color: 'white'
+                              color: "white",
                             }}
                           >
-                            {appointments[0].from_dt.getFullYear()}
+                            {addHoursToDate(
+                              appointments[0].slot.date
+                            ).getFullYear()}
                           </h3>
                         </Grid>
                       </Grid>
@@ -311,10 +336,10 @@ const Dash = () => {
                             style={{
                               margin: "0",
                               padding: "0",
-                              color: 'white'
+                              color: "white",
                             }}
                           >
-                            {appointments[0].doctor}
+                            {appointments[0].doctor_id.name}
                           </h2>
                         </Grid>
                         <Grid item xs={12}>
@@ -322,15 +347,15 @@ const Dash = () => {
                             style={{
                               margin: "0",
                               padding: "0",
-                              color: 'white'
+                              color: "white",
                             }}
                           >
-                            {appointments[0].speciality} <br />
-                            {`${appointments[0].from_dt
-                              .toTimeString()
-                              .slice(0, 5)} - ${appointments[0].to_dt
-                              .toTimeString()
-                              .slice(0, 5)}`}
+                            {appointments[0].doctor_id.speciality.speciality} <br />
+                            {`${appointments[0].slot.slot} ${
+                              appointments[0].slot.slot.slice(0, 2) > 11
+                                ? "pm"
+                                : "am"
+                            }`}
                           </h4>
                         </Grid>
                       </Grid>
@@ -345,7 +370,11 @@ const Dash = () => {
                   >
                     <Paper
                       elevation={2}
-                      style={{ borderRadius: 15, padding: "1%", backgroundColor: '#0072ff' }}
+                      style={{
+                        borderRadius: 15,
+                        padding: "1%",
+                        backgroundColor: "#0072ff",
+                      }}
                     >
                       <Grid
                         container
@@ -366,10 +395,16 @@ const Dash = () => {
                                 textAlign: "center",
                                 padding: "0",
                                 margin: "0%",
-                                color: 'white'
+                                color: "white",
                               }}
                             >
-                              {months[appointments[1].from_dt.getMonth()]}
+                              {
+                                months[
+                                  addHoursToDate(
+                                    appointments[1].slot.date
+                                  ).getMonth()
+                                ]
+                              }
                             </h3>
                           </Grid>
                           <Grid item xs={12}>
@@ -378,10 +413,12 @@ const Dash = () => {
                                 textAlign: "center",
                                 padding: "0",
                                 margin: "1%",
-                                color: 'white'
+                                color: "white",
                               }}
                             >
-                              {appointments[1].from_dt.getDate()}
+                              {addHoursToDate(
+                                appointments[1].slot.date
+                              ).getDate()}
                             </h2>
                           </Grid>
                           <Grid item xs={12}>
@@ -390,10 +427,12 @@ const Dash = () => {
                                 textAlign: "center",
                                 padding: "0",
                                 margin: "0%",
-                                color: 'white'
+                                color: "white",
                               }}
                             >
-                              {appointments[1].from_dt.getFullYear()}
+                              {addHoursToDate(
+                                appointments[1].slot.date
+                              ).getFullYear()}
                             </h3>
                           </Grid>
                         </Grid>
@@ -403,7 +442,7 @@ const Dash = () => {
                               style={{
                                 margin: "0",
                                 padding: "0",
-                                color: 'white'
+                                color: "white",
                               }}
                             >
                               {appointments[1].doctor}
@@ -414,15 +453,15 @@ const Dash = () => {
                               style={{
                                 margin: "0",
                                 padding: "0",
-                                color: 'white'
+                                color: "white",
                               }}
                             >
                               {appointments[0].speciality} <br />
-                              {`${appointments[1].from_dt
-                                .toTimeString()
-                                .slice(0, 5)} - ${appointments[1].to_dt
-                                .toTimeString()
-                                .slice(0, 5)}`}
+                              {`${appointments[1].slot.slot} ${
+                                appointments[1].slot.slot.slice(0, 2) > 11
+                                  ? "pm"
+                                  : "am"
+                              }`}
                             </h4>
                           </Grid>
                         </Grid>
@@ -430,7 +469,7 @@ const Dash = () => {
                     </Paper>
                   </Grid>
                 )}
-                {appointments.length > 2 && (
+                {appointments.length > 0 && (
                   <Grid
                     item
                     xs={12}
@@ -439,7 +478,7 @@ const Dash = () => {
                     <Typography
                       component="h1"
                       variant="h5"
-                      sx={{ cursor: "pointer", fontFamily: 'Montserrat' }}
+                      sx={{ cursor: "pointer", fontFamily: "Montserrat" }}
                       onClick={() => {
                         history.push("/appointments");
                       }}

@@ -12,20 +12,30 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { SignUp } from "../../actions/auth";
 import autodoc from "../../assets/autodoc(1).svg";
+import logo from "../../assets/Autodoc(2).svg";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Register = () => {
   const dispatch = useDispatch();
+  const tab = useMediaQuery("(max-width:630px)");
+  const screen = useMediaQuery("(max-width:899px)");
   const [login, setLogin] = useState({
     name: "",
+    dob: new Date(),
     email: "",
     password: "",
+    ph_no: "",
+    gender: "",
   });
   const [emailError, setEmailError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -33,8 +43,10 @@ const Register = () => {
   const nameRef = useRef();
   const emailRef = useRef();
   const passRef = useRef();
-  const emailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const phoneRef = useRef();
+  const sexRef = useRef();
+  // const emailRegex =
+  //   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -48,6 +60,12 @@ const Register = () => {
     });
   };
 
+  const handleChange = (event) => {
+    setLogin((prev) => {
+      return { ...prev, gender: event.target.value };
+    });
+  };
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -58,7 +76,17 @@ const Register = () => {
 
   const Submit = () => {
     dispatch({ type: "LOAD" });
-    dispatch(SignUp(login, history, () => dispatch({ type: "LOAD" })));
+    dispatch(SignUp(login, history, () => {
+      dispatch({ type: "LOAD" })
+      setLogin({
+        name: "",
+        dob: new Date(),
+        email: "",
+        password: "",
+        ph_no: "",
+        gender: "",
+      })
+    }));
   };
 
   return (
@@ -81,14 +109,15 @@ const Register = () => {
             align="center"
             justifyContent="space-evenly"
             style={{
-              background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
+              background: `linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)`,
               borderRadius: "0 80px 80px 0",
+              display: screen ? "none" : ""
             }}
           >
             <Grid item>
               <img
                 src={autodoc}
-                alt=""
+                alt="LOGO"
                 style={{ width: "100%", height: "100%" }}
               />
             </Grid>
@@ -103,27 +132,29 @@ const Register = () => {
             justifyContent="center"
             style={{
               backgroundColor: "#f5f5f5",
-              borderRadius: "80px 0 0 0",
-              width: "100%",
+              borderRadius: screen ? '0' : "80px 0 0 0",
+              width: "90%",
             }}
           >
             <Grid container item xs justifyContent="center" alignItems="center">
               <div
                 className="neu-paper"
                 style={{
-                  //   height: "50%",
-                  minWidth: "50%",
+                  width: "90%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  margin: screen ? '0' : ''
                 }}
               >
-                <Grid
-                  container
-                  direction="column"
-                  alignItems="center"
-                  style={{ padding: "3%" }}
-                >
+                <Grid container alignItems="center" style={{ padding: "3%" }}>
+                  <Grid item xs={12}>
+                    <img
+                      src={logo}
+                      style={{ height: "6em", display: screen ? "" : "none" }}
+                      alt="LOGO"
+                    />
+                  </Grid>
                   <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
                     <Typography
                       variant="h3"
@@ -136,12 +167,13 @@ const Register = () => {
                       Register
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
+                  <Grid item xs={12} md={6} lg={6} style={{ width: "50%" }}>
                     <TextField
                       variant="outlined"
                       inputRef={nameRef}
                       label="Full Name"
                       name="name"
+                      value={login.name}
                       onChange={handleInput}
                       style={{
                         margin: "5% 0",
@@ -150,50 +182,60 @@ const Register = () => {
                       align="left"
                     />
                   </Grid>
-                  <Grid item xs={12} style={{ width: "100%" }}>
+                  <Grid item xs={12} md={6} lg={6} style={{ width: "50%" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DesktopDatePicker
-                        label="Date of Birth"
-                        inputFormat="dd/MM/yyyy"
-                        // value={profile.dob}
-                        // onChange={(e) =>
-                        //   setProfile((prev) => {
-                        //     console.log(e);
-                        //     return {
-                        //       ...prev,
-                        //       dob: e,
-                        //     };
-                        //   })
-                        // }
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            style={{
-                              margin: "5% 0",
-                              width: "90%",
-                            }}
-                          />
-                        )}
-                      />
-                      {/* <MobileDatePicker
-                        label="Date of Birth"
-                        inputFormat="dd/MM/yyyy"
-                        value={user.dob}
-                        renderInput={(params) => 
-                          <TextField 
-                            {...params} 
-                            fullWidth
-                            style={{
-                              margin: "5% 0",
-                              width: "90%",
-                            }} 
-                          />
-                        }
-                      /> */}
+                      {tab ? (
+                        <MobileDatePicker
+                          label="Date of Birth"
+                          inputFormat="dd/MM/yyyy"
+                          value={login.dob}
+                          onChange={(e) =>
+                            setLogin((prev) => {
+                              return {
+                                ...prev,
+                                dob: e,
+                              };
+                            })
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              style={{
+                                margin: "5% 0",
+                                width: "90%",
+                              }}
+                            />
+                          )}
+                        />
+                      ) : (
+                        <DesktopDatePicker
+                          label="Date of Birth"
+                          inputFormat="dd/MM/yyyy"
+                          value={login.dob}
+                          onChange={(e) =>
+                            setLogin((prev) => {
+                              return {
+                                ...prev,
+                                dob: e,
+                              };
+                            })
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              style={{
+                                margin: "5% 0",
+                                width: "90%",
+                              }}
+                            />
+                          )}
+                        />
+                      )}
                     </LocalizationProvider>
                   </Grid>
-                  <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
+                  <Grid item xs={12} md={6} lg={6} style={{ width: "50%" }}>
                     <TextField
                       error={emailError}
                       helperText={emailError ? "Enter a valid email" : ""}
@@ -201,6 +243,7 @@ const Register = () => {
                       inputRef={emailRef}
                       label="Email Address"
                       name="email"
+                      value={login.email}
                       autoComplete="email"
                       onChange={handleInput}
                       style={{
@@ -210,7 +253,7 @@ const Register = () => {
                       align="left"
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
+                  <Grid item xs={12} md={6} lg={6} style={{ width: "50%" }}>
                     <FormControl
                       variant="outlined"
                       style={{
@@ -226,6 +269,7 @@ const Register = () => {
                         id="outlined-adornment-password"
                         label="Password"
                         type={showPassword ? "text" : "password"}
+                        value={login.password}
                         onChange={handleInput}
                         name="password"
                         autoComplete="current-password"
@@ -245,8 +289,51 @@ const Register = () => {
                             </IconButton>
                           </InputAdornment>
                         }
-                        labelWidth={70}
                       />
+                    </FormControl>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={6}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <TextField
+                      variant="outlined"
+                      inputRef={phoneRef}
+                      label="Phone No."
+                      name="ph_no"
+                      value={login.ph_no}
+                      onChange={handleInput}
+                      style={{
+                        margin: "3% 0",
+                        width: "90%",
+                      }}
+                      align="left"
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={6}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <FormControl sx={{ width: "90%", margin: "3% 0" }}>
+                      <InputLabel id="demo-simple-select-label">Sex</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={login.gender}
+                        label="Sex"
+                        onChange={handleChange}
+                        ref={sexRef}
+                      >
+                        <MenuItem value={"Male"}>Male</MenuItem>
+                        <MenuItem value={"Female"}>Female</MenuItem>
+                        <MenuItem value={"Other"}>Other</MenuItem>
+                      </Select>
                     </FormControl>
                   </Grid>
                   <Grid
@@ -266,13 +353,7 @@ const Register = () => {
                       Register
                     </Button>
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={12}
-                    lg={12}
-                    style={{ width: "100%", margin: "2% 0 2% 0" }}
-                  >
+                  <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
                     <Typography variant="subtitle1">
                       Already a member? <Link to="/login">Login</Link>
                     </Typography>

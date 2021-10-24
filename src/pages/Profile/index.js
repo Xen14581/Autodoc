@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -20,12 +20,22 @@ import {
   ChangePassword,
   UpdateProfile,
 } from "../../actions/auth";
+import { baseurl } from "../../api/url";
+import { styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  alignItems: "center",
+  paddingTop: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+}));
 
 const Profile = () => {
+  document.title = 'My Profile - Autodoc'
   const user = useSelector((state) => state.auth);
   const tab = useMediaQuery("(max-width:630px)");
-  const mq12 = useMediaQuery("(max-width:1200px)");
-  const imageInput = useRef();
+  const [image, setImage] = useState("");
+  const imageInput = useRef(null);
   const dispatch = useDispatch();
 
   const width = window.innerWidth;
@@ -43,9 +53,11 @@ const Profile = () => {
   });
 
   const changePfp = (image) => {
+    setImage(image);
     const formData = new FormData();
     formData.append("image", image);
     dispatch(UpdateProfilePic(formData));
+    setImage("");
   };
 
   const handleInput = (obj) => {
@@ -80,38 +92,53 @@ const Profile = () => {
   };
 
   return (
-    <main>
+    <main
+      style={{
+        height: "100%",
+        minHeight: "100vh",
+        padding: "0%",
+        margin: "0%",
+        maxWidth: "100%",
+        background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
+        overflow: "hidden",
+      }}
+    >
       <input
         ref={imageInput}
         type="file"
         style={{ display: "none" }}
+        value={image}
         onChange={(e) => changePfp(e.target.files[0])}
         accept="image/png, image/jpeg, image/jpg , image/jfif"
       />
+      <StyledToolbar />
       <Container
         style={{
-          minHeight: "100vh",
           maxWidth: "100vw",
+          height: "100%",
           padding: "0%",
           margin: "0%",
-          background: "linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)",
         }}
       >
         <Navbar />
-        <Grid container justifyContent="center" spacing={0}>
+        <Grid container justifyContent="center" spacing={3}>
           <Grid
             container
             item
             xs={12}
             lg={4}
             alignItems="center"
-            justifyContent='center'
-            sx={{ padding: "8% 2% 2% 2%", height: "100%" }}
+            justifyContent="center"
           >
-            <Grid item style={{width:"100%"}}>
+            <Grid item>
               <Paper
                 elevation={6}
-                style={{ maxWidth: "100%", padding: "4%", borderRadius: 12 }}
+                style={{
+                  maxWidth: "100%",
+                  padding: "4%",
+                  borderRadius: 12,
+                  height: "100%",
+                }}
               >
                 <Typography
                   variant="h4"
@@ -141,7 +168,11 @@ const Profile = () => {
                     >
                       <Avatar
                         alt="Profile Picture"
-                        src={user.pfp ? user.pfp : ""}
+                        src={
+                          user.profile_pic
+                            ? baseurl + "/" + user.profile_pic
+                            : ""
+                        }
                         sx={{ width: "97%", height: "97%" }}
                       />
                       <div
@@ -195,9 +226,7 @@ const Profile = () => {
             alignItems="center"
             spacing={2}
             sx={{
-              padding: `${mq12 ? "0" : "7%"} 2% 2% 2%`,
               height: "100%",
-              margin: 0,
             }}
           >
             <Grid
@@ -233,6 +262,14 @@ const Profile = () => {
                           label="Date of Birth"
                           inputFormat="dd/MM/yyyy"
                           value={profile.dob}
+                          onChange={(e) =>
+                            setProfile((prev) => {
+                              return {
+                                ...prev,
+                                dob: e,
+                              };
+                            })
+                          }
                           renderInput={(params) => (
                             <TextField {...params} fullWidth />
                           )}
@@ -262,14 +299,9 @@ const Profile = () => {
                   <Grid item xs={12} md={6} lg={6}>
                     <TextField
                       label="Gender"
-                      value={
-                        user.gender === "m"
-                          ? "Male"
-                          : user.gender === "f"
-                          ? "Female"
-                          : "Other"
-                      }
+                      value={user.gender}
                       fullWidth
+                      disabled
                     />
                   </Grid>
                   <Grid item xs={12} md={6} lg={6}>
@@ -279,7 +311,7 @@ const Profile = () => {
                     <Grid item xs={12} md={6} lg={6}>
                       <TextField
                         label="Speciality"
-                        value={user.speciality}
+                        value={user.speciality.speciality}
                         fullWidth
                         disabled
                       />

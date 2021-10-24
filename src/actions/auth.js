@@ -10,13 +10,11 @@ import { toast } from "react-toastify";
 export const Signin = (formdata, router, state) => async (dispatch) => {
   try {
     const { data } = await login(formdata);
-    console.log(data);
     dispatch({ type: "LOGIN", data: data });
     state();
     router.push("/dash");
   } catch (error) {
     new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(error);
     state();
     toast.error("Something went wrong!");
     // router.push("/dash"); ///////////////////// remove later
@@ -51,6 +49,7 @@ export const ChangePassword = (formdata, state) => async () => {
     state();
   } catch (error) {
     toast.error("Something went wrong!");
+    state();
   }
 };
 

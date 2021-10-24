@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d667f33a.chunk.css",
+    "main.js": "/static/js/main.25b47ec2.chunk.js",
+    "main.js.map": "/static/js/main.25b47ec2.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.cc932c83.js",
+    "runtime-main.js.map": "/static/js/runtime-main.cc932c83.js.map",
+    "static/css/2.d76bd2ed.chunk.css": "/static/css/2.d76bd2ed.chunk.css",
+    "static/js/2.aa05a138.chunk.js": "/static/js/2.aa05a138.chunk.js",
+    "static/js/2.aa05a138.chunk.js.map": "/static/js/2.aa05a138.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.d76bd2ed.chunk.css.map": "/static/css/2.d76bd2ed.chunk.css.map",
+    "static/css/main.d667f33a.chunk.css.map": "/static/css/main.d667f33a.chunk.css.map",
+    "static/js/2.aa05a138.chunk.js.LICENSE.txt": "/static/js/2.aa05a138.chunk.js.LICENSE.txt",
+    "static/media/2328064.de60ee02.jpg": "/static/media/2328064.de60ee02.jpg",
+    "static/media/Autodoc(2).10beab88.svg": "/static/media/Autodoc(2).10beab88.svg",
+    "static/media/Bacefook.8c98516f.png": "/static/media/Bacefook.8c98516f.png",
+    "static/media/Logo-Dark-Square.7f479ca8.jpg": "/static/media/Logo-Dark-Square.7f479ca8.jpg",
+    "static/media/UploadIcon.svg": "/static/media/UploadIcon.469126df.svg",
+    "static/media/autodoc(1).dedd4375.svg": "/static/media/autodoc(1).dedd4375.svg",
+    "static/media/brain-neural-net.5e38e4b0.jpg": "/static/media/brain-neural-net.5e38e4b0.jpg",
+    "static/media/doctors-animate.2629f603.svg": "/static/media/doctors-animate.2629f603.svg",
+    "static/media/drawing-1.30ec12ab.svg": "/static/media/drawing-1.30ec12ab.svg",
+    "static/media/online-doctor-animate.8e65f2b3.svg": "/static/media/online-doctor-animate.8e65f2b3.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.cc932c83.js",
+    "static/css/2.d76bd2ed.chunk.css",
+    "static/js/2.aa05a138.chunk.js",
+    "static/css/main.d667f33a.chunk.css",
+    "static/js/main.25b47ec2.chunk.js"
+  ]
+}
