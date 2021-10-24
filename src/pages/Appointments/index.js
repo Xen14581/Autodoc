@@ -46,8 +46,8 @@ const Appointments = () => {
   useEffect(() => ref.current?.scrollIntoView());
 
   useEffect(() => {
-    // const newSocket = io(`http://${window.location.hostname}:8000`);
-    const newSocket = io(`https://api-autodoc.herokuapp.com`);
+    const newSocket = io(`http://localhost:8000`);
+    // const newSocket = io(`https://api-autodoc.herokuapp.com`);
     setSocket(newSocket);
     return () => newSocket.close();
   }, [setSocket]);
