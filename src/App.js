@@ -5,6 +5,7 @@ import {
   Switch,
   Route,
   Redirect,
+  // useHistory,
 } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -17,6 +18,7 @@ import { AnimateSharedLayout } from "framer-motion";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login/";
 import Register from "./pages/Register/";
+import ForgotPass from "./pages/ForgotPass";
 import PatientDash from "./pages/Dash/Patient/";
 import DoctorDash from "./pages/Dash/Doctor";
 import AdminDash from "./pages/Dash/Admin";
@@ -27,12 +29,14 @@ import Book from "./pages/Book/";
 import AddSpeciality from "./pages/EditSpec";
 import ManageDoc from "./pages/ManageDoc";
 import Diagnosis from "./pages/Diagnosis";
+import History from "./pages/History";
 
 import Sidebar from "./components/Sidebar/";
 import Loader from "./components/Loader/";
 
 function App() {
   const user = useSelector((state) => state.auth);
+  // const history = useHistory();
 
   useEffect(() => {
     AOS.init({ once: true });
@@ -59,6 +63,7 @@ function App() {
             <Route path="/" exact component={Landing} />
             <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={Register} />
+            <Route path="/forgot-pass" exact component={ForgotPass} />
             {user ? (
               <>
                 <Route path="/dash" exact>
@@ -92,7 +97,18 @@ function App() {
                   )}
                 </Route>
                 <Route path="/checkup" exact>
-                  <Diagnosis />
+                  {user.role !== "admin" ? (
+                    <Diagnosis />
+                  ) : (
+                    <Redirect to="/dash" />
+                  )}
+                </Route>
+                <Route path="/history" exact>
+                  {user.role !== "admin" ? (
+                    <History />
+                  ) : (
+                    <Redirect to="/dash" />
+                  )}
                 </Route>
               </>
             ) : (

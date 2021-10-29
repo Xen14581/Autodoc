@@ -51,6 +51,7 @@ const AddSpeciality = () => {
       formData.append("speciality", spec.speciality);
       formData.append("image", spec.image);
       dispatch({ type: "LOAD" });
+      dispatch({type: 'NEW_SPEC', data: {speciality: spec.speciality, image: spec.image, _id: specs.length}})
       dispatch(
         createSpeciality(formData, () => {
           setSpec({
@@ -160,6 +161,7 @@ const AddSpeciality = () => {
                       variant="outlined"
                       inputRef={name_ref}
                       label="Speciality Name"
+                      value={spec.speciality}
                       name="name"
                       onChange={(e) => {
                         setSpec((prev) => {
@@ -248,10 +250,11 @@ const AddSpeciality = () => {
                         <Grid
                           container
                           item
+                          xs={12}
                           key={index}
-                          style={{ maxWidth: "50%" }}
+                          style={{ maxWidth: "60%" }}
                         >
-                          <Grid item xs={10}>
+                          <Grid item xs={10} style={{display: 'flex', justifyContent: 'center'}}>
                             <Typography
                               variant="h5"
                               style={{ fontFamily: "Montserrat, sans serif" }}

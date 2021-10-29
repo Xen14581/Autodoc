@@ -1,34 +1,26 @@
 import React, { useState, useRef } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   TextField,
   Button,
   Grid,
   Container,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  InputAdornment,
-  IconButton,
   Typography,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { Signin } from "../../actions/auth";
+import { ForgotPassword } from "../../actions/auth";
 import autodoc from "../../assets/autodoc(1).svg";
 import logo from "../../assets/Autodoc(2).svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const Login = () => {
-  document.title = 'Login - Autodoc'
+const ForgotPass = () => {
+  document.title = 'Forgot Password - Autodoc'
   const screen = useMediaQuery("(max-width:899px)");
-  const [login, setLogin] = useState({ email: "", password: "" });
+  const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const emailRef = useRef();
-  const passRef = useRef();
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -37,27 +29,15 @@ const Login = () => {
         setEmailError(!emailError);
       }
     }
-    setLogin((prev) => {
-      return { ...prev, [name]: value };
-    });
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+    setEmail(value);
   };
 
   const Submit = () => {
-    if (login.email === "" || emailError) {
-      emailRef.current.focus();
-    } else if (login.password === "") {
-      passRef.current.focus();
+    dispatch({ type: "LOAD" });
+    if (email === '' || emailError) {
+        emailRef.current.focus()
     } else {
-      dispatch({ type: "LOAD" });
-      dispatch(Signin(login, history, () => dispatch({ type: "LOAD" })));
+        dispatch(ForgotPassword({"email": email}, history, () => dispatch({ type: "LOAD" })));
     }
   };
 
@@ -116,7 +96,7 @@ const Login = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  margin: screen ? "0" : "",
+                  margin: screen ? '0' : ''
                 }}
               >
                 <Grid
@@ -141,7 +121,7 @@ const Login = () => {
                       }}
                       color="rgba(0, 0, 0, 0.5)"
                     >
-                      Login
+                      Forgot Password
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
@@ -156,60 +136,18 @@ const Login = () => {
                       autoFocus
                       onChange={handleInput}
                       style={{
-                        margin: "5% 0",
+                        margin: "3% 0",
                         width: "90%",
                       }}
                       align="left"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={12} lg={12} style={{ width: "100%" }}>
-                    <FormControl
-                      // className={clsx(
-                      //   classes.margin,
-                      //   classes.textField
-                      // )}
-                      variant="outlined"
-                      style={{
-                        margin: "5% 0",
-                        width: "90%",
-                      }}
-                    >
-                      <InputLabel htmlFor="outlined-adornment-password">
-                        Password
-                      </InputLabel>
-                      <OutlinedInput
-                        inputRef={passRef}
-                        id="outlined-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        onChange={handleInput}
-                        name="password"
-                        label="Password"
-                        autoComplete="current-password"
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <Visibility />
-                              ) : (
-                                <VisibilityOff />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                    </FormControl>
                   </Grid>
                   <Grid
                     item
                     xs={12}
                     md={12}
                     lg={12}
-                    style={{ width: "100%", margin: "5% 0 5% 0" }}
+                    style={{ width: "100%", margin: "3% 0" }}
                   >
                     <Button
                       variant="contained"
@@ -218,31 +156,8 @@ const Login = () => {
                         Submit();
                       }}
                     >
-                      Login
+                      Change Password
                     </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={12}
-                    lg={12}
-                    style={{ width: "100%", margin: "0.5% 0" }}
-                  >
-                    <Typography variant="subtitle1">
-                      <Link to="/forgot-pass">Forgot Password</Link>
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={12}
-                    lg={12}
-                    style={{ width: "100%", margin: "2% 0 2% 0" }}
-                  >
-                    <Typography variant="subtitle1">
-                      New to this site?{" "}
-                      <Link to="/register">Register now!</Link>
-                    </Typography>
                   </Grid>
                 </Grid>
               </div>
@@ -254,4 +169,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPass;

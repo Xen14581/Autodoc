@@ -1,23 +1,22 @@
 import { toast } from "react-toastify";
-import { getspeciality, createspeciality, deletespeciality } from "../api/speciality";
+import {
+  getspeciality,
+  createspeciality,
+  deletespeciality,
+} from "../api/speciality";
 
 export const getSpeciality = () => async (dispatch) => {
   try {
     const { data } = await getspeciality();
-    if (data?.message) {
-      dispatch({ type: "GET_SPEC", data: data.result });
-    }
+    dispatch({ type: "GET_SPEC", data: data.result });
   } catch (error) {
     toast.error("Something went wrong!");
   }
-}
+};
 
-export const createSpeciality = (formdata, state) => async (dispatch) => {
+export const createSpeciality = (formdata, state) => async () => {
   try {
-    const { data } = await createspeciality(formdata);
-    if (data?.message) {
-      dispatch({ type: "NEW_SPEC", data: formdata });
-    }
+    await createspeciality(formdata);
     toast("Speciality created successfully!");
     state();
     return;

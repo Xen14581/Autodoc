@@ -26,6 +26,8 @@ const Messages = ({ socket }) => {
     });
   }, [socket, dispatch, selected._id]);
 
+  console.log(selected.messages)
+
   return (
     <>
       <Paper
@@ -67,7 +69,8 @@ const Messages = ({ socket }) => {
                         borderRadius: "0px 15px 15px 15px",
                       }}
                     >
-                      {m.type === "text" ? (
+                      {
+                      m.type === "text" ? (
                         <Typography
                           variant="body1"
                           component="span"
@@ -75,7 +78,8 @@ const Messages = ({ socket }) => {
                         >
                           {m.message}
                         </Typography>
-                      ) : m.type === "prescription" ? (
+                      ) : 
+                      m.type === "pres" ? (
                         <div style={{ display: "flex" }}>
                           <Typography
                             variant="body1"
@@ -127,7 +131,7 @@ const Messages = ({ socket }) => {
                         >
                           {m.message}
                         </Typography>
-                      ) : m.type === "prescription" ? (
+                      ) : m.type === "pres" ? (
                         <div style={{ display: "flex" }}>
                           <Typography
                             variant="body1"

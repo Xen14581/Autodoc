@@ -24,8 +24,10 @@ import { SignUp } from "../../actions/auth";
 import autodoc from "../../assets/autodoc(1).svg";
 import logo from "../../assets/Autodoc(2).svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { toast } from "react-toastify";
 
 const Register = () => {
+  document.title = 'Register - Autodoc'
   const dispatch = useDispatch();
   const tab = useMediaQuery("(max-width:630px)");
   const screen = useMediaQuery("(max-width:899px)");
@@ -45,8 +47,6 @@ const Register = () => {
   const passRef = useRef();
   const phoneRef = useRef();
   const sexRef = useRef();
-  // const emailRegex =
-  //   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleInput = (obj) => {
     const { name, value } = obj.target;
@@ -75,18 +75,34 @@ const Register = () => {
   };
 
   const Submit = () => {
-    dispatch({ type: "LOAD" });
-    dispatch(SignUp(login, history, () => {
-      dispatch({ type: "LOAD" })
-      setLogin({
-        name: "",
-        dob: new Date(),
-        email: "",
-        password: "",
-        ph_no: "",
-        gender: "",
-      })
-    }));
+    if (login.name === "") {
+      nameRef.current.focus()
+    } else if (login.dob.getDate() === new Date().getDate()) {
+      toast.error('Please enter proper date of birth!')
+    } else if (login.email === "") {
+      emailRef.current.focus()
+    } else if (login.password === "") {
+      passRef.current.focus()
+    } else if (login.ph_no === "") {
+      phoneRef.current.focus()
+    } else if (login.gender === "") {
+      toast.error('Please enter gender!')
+    } else {
+      dispatch({ type: "LOAD" });
+      dispatch(
+        SignUp(login, history, () => {
+          dispatch({ type: "LOAD" });
+          setLogin({
+            name: "",
+            dob: new Date(),
+            email: "",
+            password: "",
+            ph_no: "",
+            gender: "",
+          });
+        })
+      );
+    }
   };
 
   return (
@@ -111,7 +127,7 @@ const Register = () => {
             style={{
               background: `linear-gradient(180deg, #00c6ff 0%, #0072ff 100%)`,
               borderRadius: "0 80px 80px 0",
-              display: screen ? "none" : ""
+              display: screen ? "none" : "",
             }}
           >
             <Grid item>
@@ -132,7 +148,7 @@ const Register = () => {
             justifyContent="center"
             style={{
               backgroundColor: "#f5f5f5",
-              borderRadius: screen ? '0' : "80px 0 0 0",
+              borderRadius: screen ? "0" : "80px 0 0 0",
               width: "90%",
             }}
           >
@@ -144,7 +160,7 @@ const Register = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  margin: screen ? '0' : ''
+                  margin: screen ? "0" : "",
                 }}
               >
                 <Grid container alignItems="center" style={{ padding: "3%" }}>

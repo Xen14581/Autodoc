@@ -1,6 +1,7 @@
 import {
   login,
   signUp,
+  forgotpass,
   changepass,
   updateprofilepic,
   updateprofile,
@@ -16,8 +17,7 @@ export const Signin = (formdata, router, state) => async (dispatch) => {
   } catch (error) {
     new Promise((resolve) => setTimeout(resolve, 1000));
     state();
-    toast.error("Something went wrong!");
-    // router.push("/dash"); ///////////////////// remove later
+    toast.error("Invalid Credentials!");
   }
 };
 
@@ -31,9 +31,19 @@ export const SignUp = (formdata, router, state) => async (dispatch) => {
     new Promise((resolve) => setTimeout(resolve, 1000));
     state();
     toast.error("Something went wrong!");
-    // router.push("/dash"); ///////////////////// remove later
   }
 };
+
+export const ForgotPassword = (formdata, router, state) => async () => {
+  try {
+    await forgotpass(formdata)
+    router.push('/login')
+    state()
+  } catch (error) {
+    state();
+    toast.error("Something went wrong!");
+  }
+}
 
 export const Logout = (dispatch, router) => {
   try {

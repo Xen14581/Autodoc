@@ -160,7 +160,27 @@ const Sidebar = () => {
                     fontWeight: 600,
                   }}
                 >
-                  View Appointments
+                  Appointments Chat
+                </Button>
+              </motion.li>
+              <motion.li
+                variants={variant}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="li"
+              >
+                <Button
+                  onClick={() => history.push("/history")}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItens: "center",
+                    width: "100%",
+                    fontFamily: 'Montserrat, sans serif',
+                    fontWeight: 600,
+                  }}
+                >
+                  Appointments History
                 </Button>
               </motion.li>
             </>

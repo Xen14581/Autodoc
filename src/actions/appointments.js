@@ -4,6 +4,7 @@ import {
   changestatus,
   getslots,
   getappointmentsadmin,
+  gethistory,
 } from "../api/appointments";
 import { toast } from "react-toastify";
 
@@ -34,6 +35,15 @@ export const getAppointmentsAdmin = (formdata) => async (dispatch) => {
     toast.error("Something went wrong!");
   }
 };
+
+export const getHistory = () => async () => {
+  try {
+    const {data} = await gethistory()
+    return data.result;
+  } catch (error) {
+    toast.error("Something went wrong!");
+  }
+}
 
 export const changeStatus = (app_id) => async () => {
   try {

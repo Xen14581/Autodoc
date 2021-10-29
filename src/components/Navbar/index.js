@@ -161,7 +161,21 @@ const Navbar = () => {
                             : "",
                       }}
                     >
-                      View Appointments
+                      Appointments Chat
+                    </Button>
+                    <Button
+                      onClick={() => history.push("/history")}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItens: "center",
+                        borderBottom:
+                          history.location.pathname === "/history"
+                            ? "2px solid #0072ff"
+                            : "",
+                      }}
+                    >
+                      Appointments History
                     </Button>
                   </>
                 ) : (

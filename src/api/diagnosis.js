@@ -1,6 +1,6 @@
 import axios from "axios";
 import { baseurl } from "./url";
-const API = axios.create({ baseURL: `${baseurl}/` });
+const API = axios.create({ baseURL: `${baseurl}/diagnostics` });
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("token")) {
     req.headers.Authorization = localStorage.getItem("token");
