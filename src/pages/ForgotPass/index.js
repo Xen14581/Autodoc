@@ -1,12 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  Grid,
-  Container,
-  Typography,
-} from "@mui/material";
+import { TextField, Button, Grid, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { ForgotPassword } from "../../actions/auth";
 import autodoc from "../../assets/autodoc(1).svg";
@@ -14,9 +8,9 @@ import logo from "../../assets/Autodoc(2).svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ForgotPass = () => {
-  document.title = 'Forgot Password - Autodoc'
+  document.title = "Forgot Password - Autodoc";
   const screen = useMediaQuery("(max-width:899px)");
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -33,11 +27,15 @@ const ForgotPass = () => {
   };
 
   const Submit = () => {
-    dispatch({ type: "LOAD" });
-    if (email === '' || emailError) {
-        emailRef.current.focus()
+    if (email === "" || emailError) {
+      emailRef.current.focus();
     } else {
-        dispatch(ForgotPassword({"email": email}, history, () => dispatch({ type: "LOAD" })));
+      dispatch({ type: "LOAD" });
+      dispatch(
+        ForgotPassword({ email: email }, history, () =>
+          dispatch({ type: "LOAD" })
+        )
+      );
     }
   };
 
@@ -96,7 +94,7 @@ const ForgotPass = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  margin: screen ? '0' : ''
+                  margin: screen ? "0" : "",
                 }}
               >
                 <Grid
