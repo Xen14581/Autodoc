@@ -87,13 +87,14 @@ const Specialities = () => {
                       <motion.div
                         className="card-image-container"
                         layoutId={`card-image-container-${spec._id}`}
+                        style={{background: `linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.6), rgba(255,255,255,0)), url(${baseurl + "/" + spec.image})`}}
                       >
-                        <img
+                        {/* <img
                           className="card-image"
                           src={baseurl + "/" + spec.image}
                           // src={p}
                           alt=""
-                        />
+                        /> */}
                       </motion.div>
                       <motion.div
                         className="title-container"
