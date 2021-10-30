@@ -39,7 +39,7 @@ const Doctor = ({ id }) => {
   const tab = useMediaQuery("(max-width:630px)");
 
   const handleShift = (event, name) => {
-    event.getDate() < new Date().getDate()
+    event < new Date()
       ? toast.error("Please select date today or in the future.")
       : setApp((prev) => {
           return { ...prev, [name]: event };
