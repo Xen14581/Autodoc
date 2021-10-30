@@ -193,7 +193,7 @@ const AddSpeciality = () => {
                           };
                         });
                       }}
-                      imgExtension={[".jpg", ".gif", ".png", ".svg"]}
+                      imgExtension={[".jpg", ".gif", ".png", ".svg", ".jfif"]}
                       maxFileSize={1048576}
                       fileSizeError="File size is too big"
                     />
