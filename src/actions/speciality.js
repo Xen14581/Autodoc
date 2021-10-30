@@ -14,9 +14,10 @@ export const getSpeciality = () => async (dispatch) => {
   }
 };
 
-export const createSpeciality = (formdata, state) => async () => {
+export const createSpeciality = (formdata, state) => async (dispatch) => {
   try {
-    await createspeciality(formdata);
+    const {data} = await createspeciality(formdata);
+    dispatch({type: "NEW_SPEC", data: data.result})
     toast("Speciality created successfully!");
     state();
     return;
