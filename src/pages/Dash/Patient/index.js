@@ -43,6 +43,7 @@ function addHoursToDate(date) {
 }
 
 const Dash = () => {
+  document.title = 'Dashboard - Autodoc'
   const history = useHistory();
   const mq9 = useMediaQuery("(max-width:899px)");
   const dispatch = useDispatch();
