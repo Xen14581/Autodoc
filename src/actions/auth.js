@@ -23,8 +23,8 @@ export const Signin = (formdata, router, state) => async (dispatch) => {
 
 export const SignUp = (formdata, router, state) => async (dispatch) => {
   try {
-    const res = await signUp(formdata);
-    dispatch({ type: "LOGIN", data: res });
+    const {data} = await signUp(formdata);
+    dispatch({ type: "LOGIN", data: data });
     state();
     router.push("/dash");
   } catch (error) {
