@@ -226,7 +226,7 @@ const AdminDash = () => {
                               {row.p_name}
                             </TableCell>
                             <TableCell>{row.d_name}</TableCell>
-                            <TableCell>{row.date}</TableCell>
+                            <TableCell>{row.date.slice(8, 10)+row.date[7]+row.date.slice(5,7)+row.date[4]+row.date.slice(0,4)}</TableCell>
                             <TableCell>{row.slot}</TableCell>
                           </TableRow>
                         ))}

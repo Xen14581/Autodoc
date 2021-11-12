@@ -46,7 +46,7 @@ const Appointments = () => {
   useEffect(() => ref.current?.scrollIntoView());
 
   useEffect(() => {
-    const newSocket = io(`https://a24c-1-38-144-33.ngrok.io`);
+    const newSocket = io(`https://7e5c-182-48-203-250.ngrok.io`);
     // const newSocket = io(`https://api-autodoc.herokuapp.com`);
     // const newSocket = io('http://localhost:8000')
     setSocket(newSocket);
@@ -163,38 +163,36 @@ const Appointments = () => {
                             <Avatar
                               alt="Remy Sharp"
                               src={
-                                user.role === "patient"
-                                  ? selected.participants.doctor_id.profile_pic
-                                    ? baseurl +
+                                selected.participants.doctor_id._id === user._id
+                                  ? selected.participants.patient_id
+                                      .profile_pic &&
+                                    baseurl +
+                                      "/" +
+                                      selected.participants.patient_id
+                                        .profile_pic
+                                  : selected.participants.doctor_id
+                                      .profile_pic &&
+                                    baseurl +
                                       "/" +
                                       selected.participants.doctor_id
                                         .profile_pic
-                                    : ""
-                                  : user.role === "doctor" &&
-                                    selected.participants.patient_id.profile_pic
-                                  ? baseurl +
-                                    "/" +
-                                    selected.participants.patient_id.profile_pic
-                                  : ""
                               }
                               sx={{ width: 40, height: 40 }}
                             >
-                              {user.role === "patient"
-                                ? selected.participants.doctor_id.profile_pic
+                              {selected.participants.doctor_id._id === user._id
+                                ? selected.participants.patient_id.profile_pic
                                   ? ""
-                                  : selected.participants.doctor_id.name[0]
-                                : user.role === "doctor" &&
-                                  selected.participants.patient_id.profile_pic
+                                  : selected.participants.patient_id.name[0]
+                                : selected.participants.doctor_id.profile_pic
                                 ? ""
-                                : selected.participants.patient_id.name[0]}
+                                : selected.participants.doctor_id.name[0]}
                             </Avatar>
                           </Grid>
                           <Grid item xs={8}>
                             <h3 style={{ margin: "1% 0" }}>
-                              {user.role === "patient"
-                                ? selected.participants.doctor_id.name
-                                : user.role === "doctor" &&
-                                  selected.participants.patient_id.name}
+                              {selected.participants.doctor_id._id === user._id
+                                ? selected.participants.patient_id.name
+                                : selected.participants.doctor_id.name}
                             </h3>
                           </Grid>
                         </Grid>

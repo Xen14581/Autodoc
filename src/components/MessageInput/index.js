@@ -29,7 +29,7 @@ const MessageInput = ({ socket }) => {
 
   return (
     <>
-      {user.role === "doctor" && (
+      {user._id === selected.participants.doctor_id._id && (
         <>
           <IconButton
             size="large"

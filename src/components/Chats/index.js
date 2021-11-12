@@ -27,17 +27,19 @@ const Chats = ({ search }) => {
   useEffect(() => {
     setFiltered(
       chat?.filter((d) =>
-        user.role === 'patient' ?
-        d?.participants.doctor_id.name
-          .toLowerCase()
-          .includes(search.toLowerCase())
-        : user.role === 'doctor' &&
-        d?.participants.patient_id.name
-          .toLowerCase()
-          .includes(search.toLowerCase())
+        d !== [] && d?.participants.doctor_id._id === user._id
+          ? d.participants.patient_id.name
+              .toLowerCase()
+              .includes(search.toLowerCase())
+          : d.participants.doctor_id.name
+              .toLowerCase()
+              .includes(search.toLowerCase())
       )
     );
-  }, [chat, search, user.role]);
+  }, [chat, search, user.role, user._id]);
+
+  console.log(chat);
+  console.log(filtered);
 
   return (
     <>
@@ -92,32 +94,24 @@ const Chats = ({ search }) => {
                   <Avatar
                     alt="Remy Sharp"
                     src={
-                      user.role === "patient"
-                        ? d.participants.doctor_id.profile_pic
-                          ? baseurl + "/" + d.participants.doctor_id.profile_pic
-                          : ""
-                        : user.role === "doctor" &&
-                          d.participants.patient_id.profile_pic
-                        ? baseurl + "/" + d.participants.patient_id.profile_pic
-                        : ""
+                      d !== [] && d?.participants.doctor_id._id === user._id
+                        ? d.participants.patient_id.profile_pic && baseurl + "/" + d.participants.patient_id.profile_pic
+                        : d.participants.doctor_id.profile_pic && baseurl + "/" + d.participants.doctor_id.profile_pic
                     }
                     sx={{ width: 50, height: 50 }}
                   >
-                    {user.role === "patient"
-                      ? d.participants.doctor_id.profile_pic
-                        ? ""
-                        : d.participants.doctor_id.name[0]
-                      : user.role === "doctor" &&
-                        d.participants.patient_id.profile_pic
-                      ? ""
-                      : d.participants.patient_id.name[0]}
+                    {
+                    d !== [] && d?.participants.doctor_id._id === user._id
+                        ? d.participants.patient_id.profile_pic ? "" : d.participants.patient_id.name[0]
+                        : d.participants.doctor_id.profile_pic ? "" : d.participants.doctor_id.name[0]
+                    }
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    user.role === "patient"
-                      ? d.participants.doctor_id.name
-                      : user.role === "doctor" && d.participants.patient_id.name
+                    d !== [] && d?.participants.doctor_id._id === user._id
+                        ? d.participants.patient_id.name
+                        : d.participants.doctor_id.name
                   }
                   sx={{ padding: "0 7%", fontFamily: "Montserrat, sans serif" }}
                 />

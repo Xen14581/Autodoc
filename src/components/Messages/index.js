@@ -26,8 +26,6 @@ const Messages = ({ socket }) => {
     });
   }, [socket, dispatch, selected._id]);
 
-  console.log(selected.messages)
-
   return (
     <>
       <Paper
