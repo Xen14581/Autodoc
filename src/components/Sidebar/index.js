@@ -88,7 +88,10 @@ const Sidebar = () => {
             className="li"
           >
             <Button
-              onClick={() => history.push("/dash")}
+              onClick={() => {
+                history.push("/dash")
+                dispatch({type: "TOGGLE"})
+              }}
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -110,7 +113,10 @@ const Sidebar = () => {
                 className="li"
               >
                 <Button
-                  onClick={() => history.push("/checkup")}
+                  onClick={() => {
+                    history.push("/checkup")
+                    dispatch({type: "TOGGLE"})
+                  }}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -130,7 +136,10 @@ const Sidebar = () => {
                 className="li"
               >
                 <Button
-                  onClick={() => history.push("/book")}
+                  onClick={() => {
+                    history.push("/book")
+                    dispatch({type: "TOGGLE"})
+                  }}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -150,7 +159,10 @@ const Sidebar = () => {
                 className="li"
               >
                 <Button
-                  onClick={() => history.push("/appointments")}
+                  onClick={() => {
+                    history.push("/appointments")
+                    dispatch({type: "TOGGLE"})
+                  }}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -170,7 +182,10 @@ const Sidebar = () => {
                 className="li"
               >
                 <Button
-                  onClick={() => history.push("/history")}
+                  onClick={() => {
+                    history.push("/history")
+                    dispatch({type: "TOGGLE"})
+                  }}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -193,7 +208,10 @@ const Sidebar = () => {
                 className="li"
               >
                 <Button
-                  onClick={() => history.push("/edit-speciality")}
+                  onClick={() => {
+                    history.push("/edit-speciality")
+                    dispatch({type: "TOGGLE"})
+                  }}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -213,7 +231,10 @@ const Sidebar = () => {
                 className="li"
               >
                 <Button
-                  onClick={() => history.push("/manage-doc")}
+                  onClick={() => {
+                    history.push("/manage-doc")
+                    dispatch({type: "TOGGLE"})
+                  }}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -235,7 +256,10 @@ const Sidebar = () => {
             className="li"
           >
             <Button
-              onClick={() => Logout(dispatch, history)}
+              onClick={() => {
+                Logout(dispatch, history)
+                dispatch({type: "TOGGLE"})
+              }}
               style={{
                 display: "flex",
                 justifyContent: "center",

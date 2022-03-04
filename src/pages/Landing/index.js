@@ -15,6 +15,7 @@ import Avatar from "@mui/material/Avatar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typed from "react-typed";
 import { useHistory } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import bg from "../../assets/2328064.jpg";
 import nn from "../../assets/brain-neural-net.jpg";
 import bacefook from "../../assets/Bacefook.png";
@@ -26,6 +27,7 @@ const theme = createTheme();
 const Landing = () => {
   document.title="AUTODOC - Landing"
   const history = useHistory();
+  const mq9 = useMediaQuery("(max-width:899px)");
   return (
     <main style={{ width: "100%" }}>
       <ThemeProvider theme={theme}>
@@ -42,12 +44,12 @@ const Landing = () => {
               alignItems="center"
               // justifyContent="space-between"
             >
-              <Grid item xs={1}>
+              <Grid item xs={mq9 ? 6 : 1}>
                 <Link to="/homepage">
                   <img src={logo} style={{ height: "4em" }} alt="LOGO" />
                 </Link>
               </Grid>
-              <Grid item xs={9}>
+              {!mq9 && <Grid item xs={9}>
                 <Typography
                   variant="h4"
                   component="span"
@@ -60,8 +62,8 @@ const Landing = () => {
                 >
                   Autodoc
                 </Typography>
-              </Grid>
-              <Grid item xs={2}>
+              </Grid>}
+              <Grid item xs={mq9? 6 : 2}>
                 <Button
                   variant="contained"
                   onClick={() => history.push("/login")}
@@ -81,7 +83,7 @@ const Landing = () => {
               backgroundPosition: "top",
               pt: 8,
               pb: 6,
-              height: "80vh",
+              height: mq9 ? "85vh" : "80vh",
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-start",
@@ -333,6 +335,7 @@ const Landing = () => {
                 marginRight: "0%",
                 background: "rgba(128,128,128,0.4)",
                 backdropFilter: "blur(3px)",
+                minWidth: mq9 ? "100vw" : ""
               }}
               data-aos="zoom-out"
               data-aos-duration="2000"

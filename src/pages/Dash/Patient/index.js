@@ -192,7 +192,7 @@ const Dash = () => {
             style={{
               padding: `2%`,
               boxShadow: "3px 0px 30px -3px rgba(66,66,66,0.75)",
-              minHeight: "91.5vh",
+              minHeight: mq9 ? "50vh" : "91.5vh",
               height: "100%",
               background: "whitesmoke",
             }}
