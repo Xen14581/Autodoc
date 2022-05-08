@@ -9,10 +9,39 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Navbar from "../../components/Navbar";
-import { Diagnose } from "../../actions/dignosis";
+import {
+  Diagnose,
+  diagnoseCancer,
+  diagnoseDiabetes,
+  diagnoseLiverDisease,
+} from "../../actions/diagnosis";
 import { useDispatch, useSelector } from "react-redux";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "center",
@@ -28,6 +57,7 @@ const Diagnosis = () => {
   document.title = "AI Diagnosis - Autodoc";
   const dispatch = useDispatch();
   const tab = useMediaQuery("(max-width:630px)");
+  const [measures, setMeasures] = useState({});
   const [symptoms, setSymp] = useState({
     "Bony lumps on finger joints": 0,
     "Murphy's sign": 0,
@@ -435,6 +465,69 @@ const Diagnosis = () => {
     "yellow sputum": 0,
   });
 
+  const cancer_labels = [
+    "Radius Mean",
+    "Texture Mean",
+    "Perimeter Mean",
+    "Area Mean",
+    "Smoothness Mean",
+    "Compactness Mean",
+    "Concavity Mean",
+    "Concave Points Mean",
+    "Symmetry Mean",
+    "Fractal Dimension Mean",
+    "Radius Standard Error",
+    "Texture Standard Error",
+    "Perimeter Standard Error",
+    "Area Standard Error",
+    "Smoothness Standard Error",
+    "Compactness Standard Error",
+    "Concavity Standard Error",
+    "Concave Points Standard Error",
+    "Symmetry Standard Error",
+    "Fractal Dimension Standard Error",
+    "Radius Worst",
+    "Texture Worst",
+    "Perimeter Worst",
+    "Area Worst",
+    "Smoothness Worst",
+    "Compactness Worst",
+    "Concavity Worst",
+    "Concave Points Worst",
+    "Symmetry Worst",
+    "Fractal Dimension Worst",
+  ];
+
+  const diabetes_labels = [
+    "Pregnancies",
+    "Glucose",
+    "Blood Pressure",
+    "Skin Thickness",
+    "Insulin",
+    "BMI",
+    "Diabetes Pedigree Function",
+    "Age",
+  ];
+
+  const liver_labels = [
+    "Age",
+    "Gender",
+    "Total Bilirubin",
+    "Direct Bilirubin",
+    "Alkaline Phosphotase",
+    "Alamine Aminotransferase",
+    "Aspartate Aminotransferase",
+    "Total Proteins",
+    "Albumin",
+    "Albumin and Globulin Rates",
+  ];
+
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const dia = useSelector((state) => state.appointments.diagnosis);
   const select = (symp, val) => {
     setSymp((prev) => {
@@ -442,9 +535,39 @@ const Diagnosis = () => {
     });
   };
 
-  const Submit = async () => {
-    dispatch(Diagnose(Object.values(symptoms)));
+  const Submit = async (type) => {
+    if (type === "general") {
+      dispatch(Diagnose(Object.values(symptoms)));
+    } else if (type === "cancer") {
+      const values = Object.fromEntries(
+        Object.entries(measures).filter(([key, value]) =>
+          cancer_labels.includes(key)
+        )
+      );
+      dispatch(diagnoseCancer(Object.values(values)));
+    } else if (type === "diabetes") {
+      const values = Object.fromEntries(
+        Object.entries(measures).filter(([key, value]) =>
+          diabetes_labels.includes(key)
+        )
+      );
+      dispatch(diagnoseDiabetes(Object.values(values)));
+    } else if (type === "liver") {
+      const values = Object.fromEntries(
+        Object.entries(measures).filter(([key, value]) =>
+          liver_labels.includes(key)
+        )
+      );
+      dispatch(diagnoseLiverDisease(Object.values(values)));
+    }
   };
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
 
   return (
     <>
@@ -482,150 +605,386 @@ const Diagnosis = () => {
               AI Diagnosis
               <Divider />
             </div>
-            {dia && dia !== "" && (
-              <Grid container justifyContent="center">
-                <Grid
-                  item
-                  xs={12}
-                  style={{ display: "flex", justifyContent: "center" }}
-                >
-                  <Typography
-                    variant="h4"
-                    style={{ fontFamily: "Montserrat, sans serif" }}
-                  >
-                    AI Prediction:
-                    <Divider />
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  style={{ display: "flex", justifyContent: "center" }}
-                >
-                  <Typography
-                    variant="h3"
-                    style={{ fontFamily: "Montserrat, sans serif" }}
-                  >
-                    {dia}
-                  </Typography>
-                </Grid>
-              </Grid>
-            )}
-            <Grid container justifyContent='center'>
-              <Grid
-                item
-                xs={12}
+            <Box sx={{ width: "100%" }}>
+              <Box
                 sx={{
+                  borderBottom: 1,
+                  borderColor: "divider",
                   display: "flex",
+                  width: "100%",
                   justifyContent: "center",
-                  padding: "3%",
                 }}
               >
-                <Paper
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    listStyle: "none",
-                    p: 0.5,
-                    m: 0,
-                    minWidth: "100%",
-                    maxHeight: "20em",
-                    overflowY: "scroll",
-                  }}
-                  component="ul"
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="basic tabs example"
                 >
-                  {Object.keys(symptoms).map((data, index) => {
-                    const ret =
-                      Object.values(symptoms)[index] === 1 ? (
-                        <ListItem key={index}>
-                          <Chip
-                            label={data}
-                            onClick={() => {
-                              select(data, 0);
-                            }}
-                          />
-                        </ListItem>
-                      ) : (
-                        ""
-                      );
-                    return ret;
-                  })}
-                </Paper>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  padding: "3%",
-                }}
-              >
-                <Paper
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    listStyle: "none",
-                    p: 0.5,
-                    m: 0,
-                    minWidth: "100%",
-                    maxHeight: "20em",
-                    overflowY: "scroll",
-                  }}
-                  component="ul"
-                >
-                  {Object.keys(symptoms).map((data, index) => {
-                    const ret =
-                      Object.values(symptoms)[index] === 0 ? (
-                        <ListItem key={index}>
-                          <Chip
-                            label={data}
-                            onClick={() => {
-                              select(data, 1);
-                            }}
-                          />
-                        </ListItem>
-                      ) : (
-                        ""
-                      );
-                    return ret;
-                  })}
-                </Paper>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <Button
-                  variant="contained"
-                  className="login-button"
-                  onClick={() => {
-                    Submit();
-                  }}
-                  sx={{ width: "60%" }}
-                >
-                  Diagnose
-                </Button>
-              </Grid>
-              <Grid
-                item
-                xs={8}
-                style={{ display: "flex", justifyContent: "center", marginTop: '2%' }}
-              >
-                <Typography
-                  variant="p"
-                  align='center'
-                  style={{ fontFamily: "Montserrat, sans serif" }}
-                >
-                  Any and all predictions made by the AI are not likely to be 100% accurate.<br /> 
-                  The AI is in its infant stage and it will only get better from here. <br />
-                  Please consult a doctor for better diagnosis.
-                </Typography>
-              </Grid>
-            </Grid>
+                  <Tab label="General Diagnosis" {...a11yProps(0)} />
+                  <Tab label="Breast Cancer Diagnosis" {...a11yProps(1)} />
+                  <Tab label="Diabetes Diagnosis" {...a11yProps(2)} />
+                  <Tab label="Liver Disease Diagnosis" {...a11yProps(3)} />
+                </Tabs>
+              </Box>
+              {dia && (
+                <Grid container justifyContent="center">
+                  <Grid
+                    item
+                    xs={12}
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Typography
+                      variant="h4"
+                      style={{ fontFamily: "Montserrat, sans serif" }}
+                    >
+                      AI Prediction:
+                      <Divider />
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Typography
+                      variant="h3"
+                      style={{ fontFamily: "Montserrat, sans serif" }}
+                    >
+                      {dia}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              )}
+              <TabPanel value={value} index={0}>
+                <Grid container justifyContent="center">
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      padding: "3%",
+                    }}
+                  >
+                    <Paper
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexWrap: "wrap",
+                        listStyle: "none",
+                        p: 0.5,
+                        m: 0,
+                        minWidth: "100%",
+                        maxHeight: "20em",
+                        overflowY: "scroll",
+                      }}
+                      component="ul"
+                    >
+                      {Object.keys(symptoms).map((data, index) => {
+                        const ret =
+                          Object.values(symptoms)[index] === 1 ? (
+                            <ListItem key={index}>
+                              <Chip
+                                label={data}
+                                onClick={() => {
+                                  select(data, 0);
+                                }}
+                              />
+                            </ListItem>
+                          ) : (
+                            ""
+                          );
+                        return ret;
+                      })}
+                    </Paper>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      padding: "3%",
+                    }}
+                  >
+                    <Paper
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexWrap: "wrap",
+                        listStyle: "none",
+                        p: 0.5,
+                        m: 0,
+                        minWidth: "100%",
+                        maxHeight: "20em",
+                        overflowY: "scroll",
+                      }}
+                      component="ul"
+                    >
+                      {Object.keys(symptoms).map((data, index) => {
+                        const ret =
+                          Object.values(symptoms)[index] === 0 ? (
+                            <ListItem key={index}>
+                              <Chip
+                                label={data}
+                                onClick={() => {
+                                  select(data, 1);
+                                }}
+                              />
+                            </ListItem>
+                          ) : (
+                            ""
+                          );
+                        return ret;
+                      })}
+                    </Paper>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Button
+                      variant="contained"
+                      className="login-button"
+                      onClick={() => {
+                        Submit("general");
+                      }}
+                      sx={{ width: "60%" }}
+                    >
+                      Diagnose
+                    </Button>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={8}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "2%",
+                    }}
+                  >
+                    <Typography
+                      variant="p"
+                      align="center"
+                      style={{ fontFamily: "Montserrat, sans serif" }}
+                    >
+                      Any and all predictions made by the AI are not likely to
+                      be 100% accurate.
+                      <br />
+                      The AI is in its infant stage and it will only get better
+                      from here. <br />
+                      Please consult a doctor for better diagnosis.
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <Grid container spacing={1} justifyContent="center">
+                  {cancer_labels.map((label) => (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "0 1% 0.5%",
+                      }}
+                    >
+                      <TextField
+                        id="outlined-basic"
+                        label={label}
+                        variant="outlined"
+                        style={{ width: "90%" }}
+                        onChange={(obj) => {
+                          setMeasures((prev) => {
+                            return { ...prev, [label]: obj.target.value };
+                          });
+                        }}
+                        value={measures[label] && measures[label]}
+                      />
+                    </Grid>
+                  ))}
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Button
+                      variant="contained"
+                      className="login-button"
+                      onClick={() => {
+                        Submit("cancer");
+                      }}
+                      sx={{ width: "60%" }}
+                    >
+                      Diagnose
+                    </Button>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={8}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "2%",
+                    }}
+                  >
+                    <Typography
+                      variant="p"
+                      align="center"
+                      style={{ fontFamily: "Montserrat, sans serif" }}
+                    >
+                      Any and all predictions made by the AI are not likely to
+                      be 100% accurate.
+                      <br />
+                      The AI is in its infant stage and it will only get better
+                      from here. <br />
+                      Please consult a doctor for better diagnosis.
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <Grid container spacing={1} justifyContent="center">
+                  {diabetes_labels.map((label) => (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "0 1% 0.5%",
+                      }}
+                    >
+                      <TextField
+                        id="outlined-basic"
+                        label={label}
+                        variant="outlined"
+                        style={{ width: "90%" }}
+                        onChange={(obj) => {
+                          setMeasures((prev) => {
+                            return { ...prev, [label]: obj.target.value };
+                          });
+                        }}
+                        value={measures[label] && measures[label]}
+                      />
+                    </Grid>
+                  ))}
+
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Button
+                      variant="contained"
+                      className="login-button"
+                      onClick={() => {
+                        Submit("diabetes");
+                      }}
+                      sx={{ width: "60%" }}
+                    >
+                      Diagnose
+                    </Button>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={8}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "2%",
+                    }}
+                  >
+                    <Typography
+                      variant="p"
+                      align="center"
+                      style={{ fontFamily: "Montserrat, sans serif" }}
+                    >
+                      Any and all predictions made by the AI are not likely to
+                      be 100% accurate.
+                      <br />
+                      The AI is in its infant stage and it will only get better
+                      from here. <br />
+                      Please consult a doctor for better diagnosis.
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+              <TabPanel value={value} index={3}>
+                <Grid container spacing={1} justifyContent="center">
+                  {liver_labels.map((label) => (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "0 1% 0.5%",
+                      }}
+                    >
+                      <TextField
+                        id="outlined-basic"
+                        label={label}
+                        variant="outlined"
+                        style={{ width: "90%" }}
+                        onChange={(obj) => {
+                          setMeasures((prev) => {
+                            return { ...prev, [label]: obj.target.value };
+                          });
+                        }}
+                        value={measures[label] && measures[label]}
+                      />
+                    </Grid>
+                  ))}
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Button
+                      variant="contained"
+                      className="login-button"
+                      onClick={() => {
+                        Submit("liver");
+                      }}
+                      sx={{ width: "60%" }}
+                    >
+                      Diagnose
+                    </Button>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={8}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "2%",
+                    }}
+                  >
+                    <Typography
+                      variant="p"
+                      align="center"
+                      style={{ fontFamily: "Montserrat, sans serif" }}
+                    >
+                      Any and all predictions made by the AI are not likely to
+                      be 100% accurate.
+                      <br />
+                      The AI is in its infant stage and it will only get better
+                      from here. <br />
+                      Please consult a doctor for better diagnosis.
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </TabPanel>
+            </Box>
           </Paper>
         </Container>
       </main>

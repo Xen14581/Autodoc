@@ -9,3 +9,6 @@ API.interceptors.request.use((req) => {
 });
 
 export const diagnose = (formdata) => API.post("/", formdata);
+export const diagnosecancer = (formdata) => API.post("/cancer", formdata);
+export const diagnosediabetes = (formdata) => API.post("/diabetes", formdata);
+export const diagnoseliverdisease = (formdata) => API.post("/liver", formdata);
